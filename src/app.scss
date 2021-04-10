@@ -1,0 +1,22 @@
+.App {
+  display: flex;
+  flex: 1 0 auto;
+
+  ul {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+
+    margin: 0;
+    padding: 20px 30px;
+    list-style-type: none;
+
+    li {
+      flex: 0 0 auto;
+      border-radius: 3px;
+      border: #aaaaaa solid 1px;
+      padding: 12px 20px;
+      margin-bottom: 15px;
+    }
+  }
+}
