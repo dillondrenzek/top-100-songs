@@ -9,24 +9,14 @@ import {
   IconButton,
   Icon,
   Button,
+  TextField,
 } from "@mui/material";
+import { FormikHelpers } from "formik";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import React, { useState, useEffect, useCallback } from "react";
-
-const SortSongs = {
-  descending(a: Song, b: Song): number {
-    return b.count - a.count;
-  },
-};
-
-interface Song {
-  count: number;
-  artist: string;
-  name: string;
-}
-
-type NewSong = Pick<Song, "name">;
+import { useNewSongForm } from "../use-new-song-form";
+import { NewSong, Song, SortSongs, createSong } from "../song";
 
 function useSongList() {
   const [items, setItems] = useState<Song[]>([
@@ -61,14 +51,9 @@ function useSongList() {
     [items]
   );
 
-  const createSong = useCallback(
+  const createSongCallback = useCallback(
     (song: NewSong) => {
-      const newSong: Song = {
-        count: 0,
-        artist: "",
-        ...song,
-      };
-      const newItems = [newSong, ...items].sort(SortSongs.descending);
+      const newItems = [createSong(song), ...items].sort(SortSongs.descending);
 
       setItems(newItems);
     },
@@ -79,7 +64,7 @@ function useSongList() {
     songs: items,
     increaseSongCount,
     decreaseSongCount,
-    createSong,
+    createSong: createSongCallback,
   };
 }
 
@@ -87,35 +72,81 @@ export function SongList() {
   const { songs, increaseSongCount, decreaseSongCount, createSong } =
     useSongList();
 
-  const handleNewSong = useCallback(() => {
-    createSong({
-      name: "New Song",
-    });
-  }, [createSong]);
+  const onSubmit = useCallback(
+    (newSong: NewSong, formikHelpers: FormikHelpers<NewSong>) => {
+      createSong(newSong);
 
-  return songs.length ? (
-    <Card sx={{ width: "100%" }}>
-      <Button variant="outlined" onClick={handleNewSong}>
-        New
-      </Button>
-      <List>
-        {songs.map((song, i) => (
-          <ListItem key={i}>
-            <Stack direction="row" alignItems="center">
-              <Stack direction="row" alignItems="center">
-                <IconButton onClick={() => increaseSongCount(song)}>
-                  <KeyboardArrowUpIcon />
-                </IconButton>
-                <ListItemText primary={song.count} />
-                <IconButton onClick={() => decreaseSongCount(song)}>
-                  <KeyboardArrowDownIcon />
-                </IconButton>
-              </Stack>
-              <ListItemText primary={`${song.name} - ${song.artist}`} />
-            </Stack>
-          </ListItem>
-        ))}
-      </List>
-    </Card>
-  ) : null;
+      formikHelpers.resetForm();
+    },
+    [createSong]
+  );
+
+  const { handleSubmit, handleChange, handleBlur, values } = useNewSongForm({
+    initialValues: {
+      name: "",
+      artist: "",
+    },
+    onSubmit,
+  });
+
+  return (
+    <Stack direction="column" alignItems="flex-start" spacing={2}>
+      <Card sx={{ px: 3, py: 2 }}>
+        <Stack
+          direction="row"
+          spacing={2}
+          component="form"
+          onSubmit={handleSubmit}
+        >
+          <TextField
+            tabIndex={0}
+            name="name"
+            label="Name"
+            variant="outlined"
+            value={values.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <TextField
+            tabIndex={1}
+            name="artist"
+            label="Artist"
+            variant="outlined"
+            value={values.artist}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <Button type="submit" variant="outlined">
+            New
+          </Button>
+        </Stack>
+      </Card>
+      <Card sx={{ width: "100%", px: 1, py: 1 }}>
+        {songs.length ? (
+          <List>
+            {songs.map((song, i) => (
+              <ListItem key={i}>
+                <Stack direction="row" alignItems="center">
+                  <ListItemText sx={{ mr: 3 }} secondary={i + 1} />
+                  <Stack direction="row" alignItems="center">
+                    <IconButton onClick={() => increaseSongCount(song)}>
+                      <KeyboardArrowUpIcon />
+                    </IconButton>
+                    <ListItemText primary={song.count} />
+                    <IconButton onClick={() => decreaseSongCount(song)}>
+                      <KeyboardArrowDownIcon />
+                    </IconButton>
+                  </Stack>
+                  <Stack direction="column">
+                    <ListItemText primary={song.name ?? "(no name)"} />
+                    <ListItemText secondary={song.artist ?? "(no artist)"} />
+                  </Stack>
+                </Stack>
+              </ListItem>
+            ))}
+          </List>
+        ) : null}
+      </Card>
+    </Stack>
+  );
 }
