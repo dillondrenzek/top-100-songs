@@ -1,11 +1,11 @@
-import React from 'react';
-import './app.scss';
-import { SongList } from './song-list/song-list';
+import { Box } from "@mui/material";
+import React from "react";
+import { SongList } from "./song-list/song-list";
 
 export default function App() {
   return (
-    <div className='App'>
+    <Box>
       <SongList />
-    </div>
+    </Box>
   );
 }

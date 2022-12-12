@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText } from "@mui/material";
+import { List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import React, { useState, useEffect } from "react";
 
 interface Song {
@@ -41,11 +41,11 @@ export function SongList() {
       {songs.map((song, i) => (
         <ListItem disablePadding key={i}>
           <ListItemText primary={song.label} />
-          <div>
-            <button onClick={() => increaseSongCount(song)}>Up</button>
-            <span>{song.count}</span>
-            <button onClick={() => null}>Down</button>
-          </div>
+          <ListItemButton onClick={() => increaseSongCount(song)}>
+            Up
+          </ListItemButton>
+          <ListItemText primary={song.count} />
+          <ListItemButton onClick={() => null}>Down</ListItemButton>
         </ListItem>
       ))}
     </List>
