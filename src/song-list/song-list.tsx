@@ -8,28 +8,28 @@ import {
   Box,
   IconButton,
   Icon,
+  Button,
 } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import React, { useState, useEffect, useCallback } from "react";
 
 interface Song {
-  label: string;
   count: number;
+  artist: string;
+  name: string;
 }
 
-function useSongList() {
-  const [items, setItems] = useState<Song[]>([]);
-  const shouldFetchItems = items && items.length;
+type NewSong = Pick<Song, "name">;
 
-  useEffect(() => {
-    console.log("items:", items);
-    setItems([
-      { label: "A", count: 0 },
-      { label: "B", count: 0 },
-      { label: "C", count: 0 },
-    ]);
-  }, [shouldFetchItems]);
+function useSongList() {
+  const [items, setItems] = useState<Song[]>([
+    { name: "Song Name A", artist: "Artist Name", count: 0 },
+    { name: "Song Name B", artist: "Artist Name", count: 0 },
+    { name: "Song Name C", artist: "Artist Name", count: 0 },
+    { name: "Song Name D", artist: "Artist Name", count: 0 },
+    { name: "Song Name E", artist: "Artist Name", count: 0 },
+  ]);
 
   const increaseSongCount = useCallback(
     (song: Song) => {
@@ -45,17 +45,59 @@ function useSongList() {
     [items]
   );
 
+  const decreaseSongCount = useCallback(
+    (song: Song) => {
+      const newItems = [
+        ...items.filter((item) => item !== song),
+        { ...song, count: song.count - 1 },
+      ].sort((a, b) => {
+        return b.count - a.count;
+      });
+
+      setItems(newItems);
+    },
+    [items]
+  );
+
+  const createSong = useCallback(
+    (song: NewSong) => {
+      const newSong: Song = {
+        count: 0,
+        artist: "",
+        ...song,
+      };
+      const newItems = [newSong, ...items].sort((a, b) => {
+        return b.count - a.count;
+      });
+
+      setItems(newItems);
+    },
+    [items]
+  );
+
   return {
     songs: items,
     increaseSongCount,
+    decreaseSongCount,
+    createSong,
   };
 }
 
 export function SongList() {
-  const { songs, increaseSongCount } = useSongList();
+  const { songs, increaseSongCount, decreaseSongCount, createSong } =
+    useSongList();
+
+  const handleNewSong = useCallback(() => {
+    createSong({
+      name: "New Song",
+    });
+  }, [createSong]);
 
   return songs.length ? (
     <Card sx={{ width: "100%" }}>
+      <Button variant="outlined" onClick={handleNewSong}>
+        New
+      </Button>
       <List>
         {songs.map((song, i) => (
           <ListItem key={i}>
@@ -65,11 +107,11 @@ export function SongList() {
                   <KeyboardArrowUpIcon />
                 </IconButton>
                 <ListItemText primary={song.count} />
-                <IconButton onClick={() => null}>
+                <IconButton onClick={() => decreaseSongCount(song)}>
                   <KeyboardArrowDownIcon />
                 </IconButton>
               </Stack>
-              <ListItemText primary={song.label} />
+              <ListItemText primary={`${song.name} - ${song.artist}`} />
             </Stack>
           </ListItem>
         ))}
