@@ -14,6 +14,12 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import React, { useState, useEffect, useCallback } from "react";
 
+const SortSongs = {
+  descending(a: Song, b: Song): number {
+    return b.count - a.count;
+  },
+};
+
 interface Song {
   count: number;
   artist: string;
@@ -36,9 +42,7 @@ function useSongList() {
       const newItems = [
         ...items.filter((item) => item !== song),
         { ...song, count: song.count + 1 },
-      ].sort((a, b) => {
-        return b.count - a.count;
-      });
+      ].sort(SortSongs.descending);
 
       setItems(newItems);
     },
@@ -50,9 +54,7 @@ function useSongList() {
       const newItems = [
         ...items.filter((item) => item !== song),
         { ...song, count: song.count - 1 },
-      ].sort((a, b) => {
-        return b.count - a.count;
-      });
+      ].sort(SortSongs.descending);
 
       setItems(newItems);
     },
@@ -66,9 +68,7 @@ function useSongList() {
         artist: "",
         ...song,
       };
-      const newItems = [newSong, ...items].sort((a, b) => {
-        return b.count - a.count;
-      });
+      const newItems = [newSong, ...items].sort(SortSongs.descending);
 
       setItems(newItems);
     },
