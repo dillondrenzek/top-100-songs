@@ -1,42 +1,11 @@
-import {
-  Box,
-  createTheme,
-  Stack,
-  ThemeProvider,
-  ThemeOptions,
-} from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import React from "react";
 import { SongList } from "./song-list/song-list";
-
-// import { ThemeOptions } from "@material-ui/core/styles/createMuiTheme";
-
-export const themeOptions: Partial<ThemeOptions> = {
-  palette: {
-    primary: {
-      main: "#5186b1",
-      dark: "#1e7498",
-      light: "#97c0dc",
-    },
-    secondary: {
-      main: "#d87c4a",
-    },
-    background: {
-      default: "#f1f1f1",
-    },
-    success: {
-      main: "#7cb342",
-    },
-    info: {
-      main: "#90caf9",
-    },
-  },
-};
-
-const theme = createTheme(themeOptions);
+import { AppThemeProvider } from "./theme";
 
 export default function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <AppThemeProvider>
       <Stack
         sx={{ width: "100%", background: "error.main" }}
         direction="column"
@@ -46,6 +15,6 @@ export default function App() {
           <SongList />
         </Box>
       </Stack>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }
