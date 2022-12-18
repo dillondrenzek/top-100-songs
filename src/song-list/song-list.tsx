@@ -21,13 +21,12 @@ enum LocalStorageKey {
 }
 
 function useLocalStorage(key: LocalStorageKey) {
-  const [_value, _setValue] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (localStorage) {
-      _setValue(localStorage.getItem(key));
+  const [_value, _setValue] = useState<string | null>(() => {
+    if (localStorage && key) {
+      return localStorage.getItem(key);
     }
-  }, [key]);
+    return null;
+  });
 
   const setValue = useCallback(
     (value: string) => {
@@ -73,8 +72,13 @@ function deserializeSongs(data: string): Song[] {
 
 function useSongs() {
   const [hasStarted, setHasStarted] = useState(false);
-  const [songs, setSongs] = useState<Song[]>([]);
   const { value, setValue } = useLocalStorage(LocalStorageKey.Songs);
+  const [songs, setSongs] = useState<Song[]>(() => {
+    if (!value) {
+      return [];
+    }
+    return deserializeSongs(value);
+  });
 
   // Initialize
   useEffect(() => {
@@ -88,9 +92,11 @@ function useSongs() {
 
   // When songs changes
   useEffect(() => {
-    // Set local storage value
-    setValue(serializeSongs(songs));
-  }, [songs, setValue]);
+    if (hasStarted) {
+      // Set local storage value
+      setValue(serializeSongs(songs));
+    }
+  }, [hasStarted, songs, setValue]);
 
   return {
     songs,
