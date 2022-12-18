@@ -20,7 +20,24 @@ enum LocalStorageKey {
   Songs = "Songs",
 }
 
-function useLocalStorage(key: LocalStorageKey) {
+function serializeSongs(songs: Song[]): string {
+  return JSON.stringify(songs);
+}
+
+function deserializeSongs(data: string): Song[] {
+  try {
+    const deserializedData = JSON.parse(data);
+
+    if (Array.isArray(deserializedData)) {
+      return deserializedData;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return [];
+}
+
+function useRawLocalStorage(key: LocalStorageKey) {
   const [_value, _setValue] = useState<string | null>(() => {
     if (localStorage && key) {
       return localStorage.getItem(key);
@@ -53,54 +70,45 @@ function useLocalStorage(key: LocalStorageKey) {
   };
 }
 
-function serializeSongs(songs: Song[]): string {
-  return JSON.stringify(songs);
-}
-
-function deserializeSongs(data: string): Song[] {
-  try {
-    const deserializedData = JSON.parse(data);
-
-    if (Array.isArray(deserializedData)) {
-      return deserializedData;
+function useLocalStorage<T>(
+  key: LocalStorageKey,
+  defaultValue: T,
+  config: { deserialize: (data: string) => T; serialize: (value: T) => string }
+) {
+  const { value: storedString, setValue: setStoredString } =
+    useRawLocalStorage(key);
+  const [state, setState] = useState<T>(() => {
+    if (storedString) {
+      return config.deserialize(storedString);
     }
-  } catch (e) {
-    console.error(e);
-  }
-  return [];
+    return defaultValue;
+  });
+
+  const setValue = useCallback(
+    (value: T) => {
+      const serializedValue = config.serialize(value);
+      if (setStoredString(serializedValue)) {
+        setState(value);
+      }
+    },
+    [config, setStoredString]
+  );
+
+  return {
+    value: state,
+    setValue,
+  };
 }
 
 function useSongs() {
-  const [hasStarted, setHasStarted] = useState(false);
-  const { value, setValue } = useLocalStorage(LocalStorageKey.Songs);
-  const [songs, setSongs] = useState<Song[]>(() => {
-    if (!value) {
-      return [];
-    }
-    return deserializeSongs(value);
+  const { value, setValue } = useLocalStorage(LocalStorageKey.Songs, [], {
+    deserialize: deserializeSongs,
+    serialize: serializeSongs,
   });
 
-  // Initialize
-  useEffect(() => {
-    if (!hasStarted) {
-      if (value) {
-        setSongs(deserializeSongs(value));
-      }
-      setHasStarted(true);
-    }
-  }, [hasStarted, value]);
-
-  // When songs changes
-  useEffect(() => {
-    if (hasStarted) {
-      // Set local storage value
-      setValue(serializeSongs(songs));
-    }
-  }, [hasStarted, songs, setValue]);
-
   return {
-    songs,
-    setSongs,
+    songs: value,
+    setSongs: setValue,
   };
 }
 
