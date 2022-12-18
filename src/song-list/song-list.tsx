@@ -22,7 +22,7 @@ enum LocalStorageKey {
 }
 
 function useSongs() {
-  const [value, setValue] = useLocalStorage(LocalStorageKey.Songs, []);
+  const [value, setValue] = useLocalStorage<Song[]>(LocalStorageKey.Songs, []);
 
   const resetSongs = useCallback(() => {
     setValue([]);
