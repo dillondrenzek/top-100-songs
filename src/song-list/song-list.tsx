@@ -15,105 +15,28 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNewSongForm } from "../use-new-song-form";
 import { NewSong, createSong, Song } from "../song";
 import { useRankedList } from "../use-ranked-list";
+import { useLocalStorage } from "usehooks-ts";
 
 enum LocalStorageKey {
   Songs = "Songs",
 }
 
-function serializeSongs(songs: Song[]): string {
-  return JSON.stringify(songs);
-}
-
-function deserializeSongs(data: string): Song[] {
-  try {
-    const deserializedData = JSON.parse(data);
-
-    if (Array.isArray(deserializedData)) {
-      return deserializedData;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-  return [];
-}
-
-function useRawLocalStorage(key: LocalStorageKey) {
-  const [_value, _setValue] = useState<string | null>(() => {
-    if (localStorage && key) {
-      return localStorage.getItem(key);
-    }
-    return null;
-  });
-
-  const setValue = useCallback(
-    (value: string) => {
-      try {
-        if (localStorage) {
-          localStorage.setItem(key, value);
-          const stored = localStorage.getItem(key);
-          if (stored === value) {
-            _setValue(stored);
-            return true;
-          }
-        }
-      } catch (e) {
-        console.error("Error setting localstorage:", e);
-      }
-      return false;
-    },
-    [key]
-  );
-
-  return {
-    value: _value,
-    setValue,
-  };
-}
-
-function useLocalStorage<T>(
-  key: LocalStorageKey,
-  defaultValue: T,
-  config: { deserialize: (data: string) => T; serialize: (value: T) => string }
-) {
-  const { value: storedString, setValue: setStoredString } =
-    useRawLocalStorage(key);
-  const [state, setState] = useState<T>(() => {
-    if (storedString) {
-      return config.deserialize(storedString);
-    }
-    return defaultValue;
-  });
-
-  const setValue = useCallback(
-    (value: T) => {
-      const serializedValue = config.serialize(value);
-      if (setStoredString(serializedValue)) {
-        setState(value);
-      }
-    },
-    [config, setStoredString]
-  );
-
-  return {
-    value: state,
-    setValue,
-  };
-}
-
 function useSongs() {
-  const { value, setValue } = useLocalStorage(LocalStorageKey.Songs, [], {
-    deserialize: deserializeSongs,
-    serialize: serializeSongs,
-  });
+  const [value, setValue] = useLocalStorage(LocalStorageKey.Songs, []);
+
+  const resetSongs = useCallback(() => {
+    setValue([]);
+  }, [setValue]);
 
   return {
     songs: value,
     setSongs: setValue,
+    resetSongs,
   };
 }
 
 export function SongList() {
-  const { songs, setSongs } = useSongs();
+  const { songs, setSongs, resetSongs } = useSongs();
   const { items, promoteItem, demoteItem, addItem } = useRankedList(songs);
 
   useEffect(() => {
@@ -166,6 +89,9 @@ export function SongList() {
           />
           <Button type="submit" variant="outlined">
             New
+          </Button>
+          <Button variant="outlined" color="error" onClick={resetSongs}>
+            Reset List
           </Button>
         </Stack>
       </Card>
