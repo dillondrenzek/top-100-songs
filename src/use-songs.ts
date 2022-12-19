@@ -45,7 +45,6 @@ export function useSongs() {
       case "CREATE_SONG": {
         const newSong: Song = {
           id: prevState.nextId,
-          count: 0,
           ...action.payload,
         };
         return {

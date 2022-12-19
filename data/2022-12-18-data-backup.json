@@ -1,110 +1,58 @@
 {
   "version": 1,
-  "nextId": 50,
+  "nextId": 51,
   "songs": [
-    {
-      "id": 11,
-      "count": 0,
-      "name": "How Far We've Come",
-      "artist": "Matchbox Twenty"
-    },
-    {
-      "id": 47,
-      "count": 0,
-      "name": "Soon the New Day",
-      "artist": "Talib Kweli"
-    },
-    { "id": 42, "count": 0, "name": "Chariot", "artist": "Gavin Degraw" },
-    { "id": 22, "count": 0, "name": "Runnin'", "artist": "The Pharcyde" },
-    { "id": 41, "count": 0, "name": "Undeniable", "artist": "Matt Kearney" },
-    {
-      "id": 48,
-      "count": 0,
-      "name": "Golden Hour",
-      "artist": "Kacey Musgraves"
-    },
-    { "id": 21, "count": 0, "name": "Heartbreaker", "artist": "John Legend" },
+    { "id": 11, "name": "How Far We've Come", "artist": "Matchbox Twenty" },
+    { "id": 47, "name": "Soon the New Day", "artist": "Talib Kweli" },
+    { "id": 42, "name": "Chariot", "artist": "Gavin Degraw" },
+    { "id": 22, "name": "Runnin'", "artist": "The Pharcyde" },
+    { "id": 41, "name": "Undeniable", "artist": "Matt Kearney" },
+    { "id": 50, "name": "Save Room", "artist": "John Legend" },
+    { "id": 21, "name": "Heartbreaker", "artist": "John Legend" },
     {
       "id": 45,
-      "count": 0,
       "name": "Stay High (Hippie Sabotage Remix)",
       "artist": "Tove Lo, Hippie Sabotage"
     },
-    { "id": 49, "count": 0, "name": "Heat Waves", "artist": "Glass Animals" },
+    { "id": 48, "name": "Golden Hour", "artist": "Kacey Musgraves" },
+    { "id": 49, "name": "Heat Waves", "artist": "Glass Animals" },
     {
       "id": 27,
-      "count": 0,
       "name": "Lights (Bassnectar Remix)",
       "artist": "Ellie Goulding, Bassnectar"
     },
-    {
-      "id": 39,
-      "count": 0,
-      "name": "Save Tonight",
-      "artist": "Eagle-Eyed Cherry"
-    },
-    {
-      "id": 16,
-      "count": 0,
-      "name": "Bohemian Like You",
-      "artist": "The Dandy Warhols"
-    },
-    { "id": 46, "count": 0, "name": "Skinny Love", "artist": "Bon Iver" },
-    { "id": 23, "count": 0, "name": "Coolie High", "artist": "Camp Lo" },
-    { "id": 26, "count": 0, "name": "Chasing Heaven", "artist": "Bassnectar" },
-    {
-      "id": 25,
-      "count": 0,
-      "name": "Sit Next To Me",
-      "artist": "Foster The People"
-    },
-    { "id": 12, "count": 0, "name": "Feather", "artist": "Nujabes" },
-    { "id": 13, "count": 0, "name": "Latch", "artist": "Disclosure" },
-    { "id": 15, "count": 0, "name": "Recovery", "artist": "Gramatik" },
-    { "id": 14, "count": 0, "name": "Only One", "artist": "Yellowcard" },
-    { "id": 44, "count": 0, "name": "Keep Her Close", "artist": "ODESZA" },
-    {
-      "id": 43,
-      "count": 0,
-      "name": "American Girls",
-      "artist": "Counting Crows"
-    },
-    { "id": 40, "count": 0, "name": "Live Well", "artist": "Palace" },
-    { "id": 38, "count": 0, "name": "Celebrate", "artist": "Cassidy" },
-    { "id": 37, "count": 0, "name": "The Fire", "artist": "The Roots" },
-    { "id": 36, "count": 0, "name": "UMI Says", "artist": "Mos Def" },
-    {
-      "id": 35,
-      "count": 0,
-      "name": "93 'Til Infinity",
-      "artist": "Souls of Mischeif"
-    },
-    { "id": 34, "count": 0, "name": "The Breach", "artist": "Dustin Tebbutt" },
+    { "id": 39, "name": "Save Tonight", "artist": "Eagle-Eyed Cherry" },
+    { "id": 16, "name": "Bohemian Like You", "artist": "The Dandy Warhols" },
+    { "id": 46, "name": "Skinny Love", "artist": "Bon Iver" },
+    { "id": 23, "name": "Coolie High", "artist": "Camp Lo" },
+    { "id": 26, "name": "Chasing Heaven", "artist": "Bassnectar" },
+    { "id": 25, "name": "Sit Next To Me", "artist": "Foster The People" },
+    { "id": 12, "name": "Feather", "artist": "Nujabes" },
+    { "id": 13, "name": "Latch", "artist": "Disclosure" },
+    { "id": 15, "name": "Recovery", "artist": "Gramatik" },
+    { "id": 14, "name": "Only One", "artist": "Yellowcard" },
+    { "id": 44, "name": "Keep Her Close", "artist": "ODESZA" },
+    { "id": 43, "name": "American Girls", "artist": "Counting Crows" },
+    { "id": 40, "name": "Live Well", "artist": "Palace" },
+    { "id": 38, "name": "Celebrate", "artist": "Cassidy" },
+    { "id": 37, "name": "The Fire", "artist": "The Roots" },
+    { "id": 36, "name": "UMI Says", "artist": "Mos Def" },
+    { "id": 35, "name": "93 'Til Infinity", "artist": "Souls of Mischeif" },
+    { "id": 34, "name": "The Breach", "artist": "Dustin Tebbutt" },
     {
       "id": 33,
-      "count": 0,
       "name": "Stars Shine Brightest",
       "artist": "The Cunninlynguists"
     },
-    { "id": 31, "count": 0, "name": "Lean On", "artist": "Mø" },
-    { "id": 29, "count": 0, "name": "Doing Me Wrong", "artist": "Popeska" },
-    { "id": 28, "count": 0, "name": "G Train", "artist": "Thirdstory" },
-    { "id": 24, "count": 0, "name": "Don't Call Me", "artist": "Tokimonsta" },
-    {
-      "id": 20,
-      "count": 0,
-      "name": "Tomorrow's Another Day",
-      "artist": "Collie Buddz"
-    },
-    { "id": 19, "count": 0, "name": "Cold Air", "artist": "The Hics" },
-    { "id": 17, "count": 0, "name": "Fears", "artist": "MTNS" },
-    {
-      "id": 18,
-      "count": 0,
-      "name": "Killing Me Softly",
-      "artist": "The Fugees"
-    },
-    { "id": 30, "count": 0, "name": "Practice", "artist": "DJ Jazzy Jeff" },
-    { "id": 32, "count": 0, "name": "We Are Young", "artist": "Fun." }
+    { "id": 31, "name": "Lean On", "artist": "Mø" },
+    { "id": 29, "name": "Doing Me Wrong", "artist": "Popeska" },
+    { "id": 28, "name": "G Train", "artist": "Thirdstory" },
+    { "id": 24, "name": "Don't Call Me", "artist": "Tokimonsta" },
+    { "id": 20, "name": "Tomorrow's Another Day", "artist": "Collie Buddz" },
+    { "id": 19, "name": "Cold Air", "artist": "The Hics" },
+    { "id": 17, "name": "Fears", "artist": "MTNS" },
+    { "id": 18, "name": "Killing Me Softly", "artist": "The Fugees" },
+    { "id": 30, "name": "Practice", "artist": "DJ Jazzy Jeff" },
+    { "id": 32, "name": "We Are Young", "artist": "Fun." }
   ]
 }
