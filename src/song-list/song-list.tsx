@@ -22,7 +22,7 @@ import React, {
   useState,
 } from "react";
 import { useNewSongForm } from "../use-new-song-form";
-import { NewSong, createSong, Song } from "../song";
+import { NewSong, Song } from "../song";
 import { useRankedList } from "../use-ranked-list";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -34,7 +34,8 @@ enum LocalStorageKey {
 
 type SongsReducerAction =
   | { type: "INCREMENT_NEXT_ID" }
-  | { type: "SET_SONGS"; payload: Song[] };
+  | { type: "SET_SONGS"; payload: Song[] }
+  | { type: "CREATE_SONG"; payload: NewSong };
 
 interface SongsDataState {
   version: number;
@@ -58,17 +59,23 @@ function useSongs() {
     Reducer<SongsDataState, SongsReducerAction>
   >((prevState, action) => {
     switch (action.type) {
+      case "CREATE_SONG": {
+        const newSong: Song = {
+          id: prevState.nextId,
+          count: 0,
+          ...action.payload,
+        };
+        return {
+          ...prevState,
+          id: prevState.nextId + 1,
+          songs: [newSong, ...prevState.songs],
+        };
+      }
+
       case "SET_SONGS": {
         return {
           ...prevState,
           songs: action.payload,
-        };
-      }
-
-      case "INCREMENT_NEXT_ID": {
-        return {
-          ...prevState,
-          nextId: prevState.nextId + 1,
         };
       }
 
@@ -82,33 +89,34 @@ function useSongs() {
     setStoredState(state);
   }, [setStoredState, state]);
 
+  const createSong = useCallback((newSong: NewSong) => {
+    dispatch({
+      type: "CREATE_SONG",
+      payload: newSong,
+    });
+  }, []);
+
   const setSongs = useCallback((newSongs: Song[]) => {
     dispatch({ type: "SET_SONGS", payload: newSongs });
   }, []);
 
-  const getNextId = useCallback(() => {
-    const result = state.nextId;
-    dispatch({ type: "INCREMENT_NEXT_ID" });
-    return result;
-  }, [state.nextId]);
+  const printState = useCallback(() => {
+    console.log(state);
+    console.log(JSON.stringify(state));
+  }, [state]);
 
   return {
     songs: state.songs,
     setSongs,
-    getNextId,
+    createSong,
+    printState,
   };
 }
 
 export function SongList() {
-  const { songs, setSongs, getNextId } = useSongs();
-  const {
-    items,
-    promoteItem,
-    demoteItem,
-    addItem,
-    moveItemToTop,
-    moveItemToBottom,
-  } = useRankedList(songs);
+  const { songs, setSongs, createSong, printState } = useSongs();
+  const { items, promoteItem, demoteItem, moveItemToTop, moveItemToBottom } =
+    useRankedList(songs);
 
   useEffect(() => {
     setSongs(items);
@@ -116,11 +124,11 @@ export function SongList() {
 
   const onSubmit = useCallback(
     (newSong: NewSong, formikHelpers: FormikHelpers<NewSong>) => {
-      addItem(createSong(newSong, getNextId()));
+      createSong(newSong);
 
       formikHelpers.resetForm();
     },
-    [addItem, getNextId]
+    [createSong]
   );
 
   const { handleSubmit, handleChange, handleBlur, values } = useNewSongForm({
@@ -160,6 +168,9 @@ export function SongList() {
           />
           <Button type="submit" variant="outlined">
             New
+          </Button>
+          <Button type="submit" variant="outlined" onClick={printState}>
+            Print
           </Button>
         </Stack>
       </Card>

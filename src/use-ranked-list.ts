@@ -83,19 +83,11 @@ export function useRankedList<T = unknown>(initialItems: T[]) {
     [items]
   );
 
-  const addItem = useCallback(
-    (item: T) => {
-      setItems([item, ...items]);
-    },
-    [items]
-  );
-
   return {
     items,
     promoteItem,
     demoteItem,
     moveItemToTop,
     moveItemToBottom,
-    addItem,
   };
 }
