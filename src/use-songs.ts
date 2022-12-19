@@ -1,74 +1,7 @@
 import { Reducer, useCallback, useEffect, useReducer } from "react";
 import { NewSong, Song } from "./song";
 import { useLocalStorage } from "usehooks-ts";
-
-function promoteItem(arr: any[], item: any): any[] {
-  // find item index (n)
-  const currentIndex = arr.indexOf(item);
-
-  if (currentIndex === -1 || currentIndex === 0) {
-    return arr;
-  }
-
-  const prevItem = arr[currentIndex - 1];
-  const currItem = arr[currentIndex];
-
-  return [
-    ...arr.slice(0, currentIndex - 1),
-    currItem,
-    prevItem,
-    ...arr.slice(currentIndex + 1),
-  ];
-}
-
-function demoteItem(items: any[], item: any): any[] {
-  // find item index (n)
-  const currentIndex = items.indexOf(item);
-
-  if (currentIndex === -1 || currentIndex >= items.length - 1) {
-    return items;
-  }
-
-  const nextItem = items[currentIndex + 1];
-  const currItem = items[currentIndex];
-
-  return [
-    ...items.slice(0, currentIndex),
-    nextItem,
-    currItem,
-    ...items.slice(currentIndex + 2),
-  ];
-}
-
-function moveItemToTop(items: any[], item: any): any[] {
-  // Identity Equality
-  const foundItemIndex = items.findIndex((val) => item === val);
-
-  if (foundItemIndex === -1 || foundItemIndex === 0) {
-    return items;
-  }
-
-  return [
-    items[foundItemIndex],
-    ...items.slice(0, foundItemIndex),
-    ...items.slice(foundItemIndex + 1),
-  ];
-}
-
-function moveItemToBottom(items: any[], item: any): any[] {
-  // Identity Equality
-  const foundItemIndex = items.findIndex((val) => item === val);
-
-  if (foundItemIndex === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, foundItemIndex),
-    ...items.slice(foundItemIndex + 1),
-    items[foundItemIndex],
-  ];
-}
+import * as ArrayHelpers from "./lib/array";
 
 enum LocalStorageKey {
   Songs = "Songs",
@@ -132,28 +65,28 @@ export function useSongs() {
       case "PROMOTE_SONG": {
         return {
           ...prevState,
-          songs: promoteItem(prevState.songs, action.payload),
+          songs: ArrayHelpers.promoteItem(prevState.songs, action.payload),
         };
       }
 
       case "DEMOTE_SONG": {
         return {
           ...prevState,
-          songs: demoteItem(prevState.songs, action.payload),
+          songs: ArrayHelpers.demoteItem(prevState.songs, action.payload),
         };
       }
 
       case "MOVE_SONG_TO_TOP": {
         return {
           ...prevState,
-          songs: moveItemToTop(prevState.songs, action.payload),
+          songs: ArrayHelpers.moveItemToTop(prevState.songs, action.payload),
         };
       }
 
       case "MOVE_SONG_TO_BOTTOM": {
         return {
           ...prevState,
-          songs: moveItemToBottom(prevState.songs, action.payload),
+          songs: ArrayHelpers.moveItemToBottom(prevState.songs, action.payload),
         };
       }
 
