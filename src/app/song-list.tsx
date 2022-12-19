@@ -6,6 +6,8 @@ import {
   Stack,
   IconButton,
   Button,
+  Box,
+  Typography,
 } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -36,6 +38,9 @@ export function SongList() {
           Print
         </Button>
       </Card>
+      <Box>
+        <Typography>{songs.length} songs</Typography>
+      </Box>
       <Card sx={{ width: "100%", px: 1, py: 1 }}>
         {songs.length ? (
           <List>
