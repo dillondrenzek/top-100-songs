@@ -117,7 +117,7 @@ export function useSongs() {
         };
         return {
           ...prevState,
-          id: prevState.nextId + 1,
+          nextId: prevState.nextId + 1,
           songs: [newSong, ...prevState.songs],
         };
       }

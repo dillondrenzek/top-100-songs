@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "nextId": 44,
+  "nextId": 46,
   "songs": [
     {
       "id": 11,
@@ -13,7 +13,7 @@
     { "id": 41, "count": 0, "name": "Undeniable", "artist": "Matt Kearney" },
     { "id": 21, "count": 0, "name": "Heartbreaker", "artist": "John Legend" },
     {
-      "id": 44,
+      "id": 45,
       "count": 0,
       "name": "Stay High (Hippie Sabotage Remix)",
       "artist": "Tove Lo, Hippie Sabotage"
@@ -92,6 +92,5 @@
     { "id": 17, "count": 0, "name": "Fears", "artist": "MTNS" },
     { "id": 30, "count": 0, "name": "Practice", "artist": "DJ Jazzy Jeff" },
     { "id": 32, "count": 0, "name": "We Are Young", "artist": "Fun." }
-  ],
-  "id": 45
+  ]
 }
