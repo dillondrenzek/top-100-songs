@@ -5,6 +5,7 @@ export const SortSongs = {
 };
 
 export interface Song {
+  id: number;
   count: number;
   artist: string;
   name: string;
@@ -12,8 +13,9 @@ export interface Song {
 
 export type NewSong = Pick<Song, "name" | "artist">;
 
-export function createSong(values: NewSong): Song {
+export function createSong(values: NewSong, id: number): Song {
   return {
+    id,
     count: 0,
     ...values,
   };

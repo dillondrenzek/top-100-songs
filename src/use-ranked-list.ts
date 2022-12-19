@@ -47,6 +47,42 @@ export function useRankedList<T = unknown>(initialItems: T[]) {
     [items]
   );
 
+  const moveItemToTop = useCallback(
+    (item: T) => {
+      // Identity Equality
+      const foundItemIndex = items.findIndex((val) => item === val);
+
+      if (foundItemIndex === -1) {
+        return;
+      }
+
+      setItems([
+        items[foundItemIndex],
+        ...items.slice(0, foundItemIndex),
+        ...items.slice(foundItemIndex + 1),
+      ]);
+    },
+    [items]
+  );
+
+  const moveItemToBottom = useCallback(
+    (item: T) => {
+      // Identity Equality
+      const foundItemIndex = items.findIndex((val) => item === val);
+
+      if (foundItemIndex === -1) {
+        return;
+      }
+
+      setItems([
+        ...items.slice(0, foundItemIndex),
+        ...items.slice(foundItemIndex + 1),
+        items[foundItemIndex],
+      ]);
+    },
+    [items]
+  );
+
   const addItem = useCallback(
     (item: T) => {
       setItems([item, ...items]);
@@ -58,6 +94,8 @@ export function useRankedList<T = unknown>(initialItems: T[]) {
     items,
     promoteItem,
     demoteItem,
+    moveItemToTop,
+    moveItemToBottom,
     addItem,
   };
 }

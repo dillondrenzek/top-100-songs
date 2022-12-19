@@ -12,6 +12,8 @@ import {
 import { FormikHelpers } from "formik";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
+import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNewSongForm } from "../use-new-song-form";
 import { NewSong, createSong, Song } from "../song";
@@ -20,6 +22,7 @@ import { useLocalStorage } from "usehooks-ts";
 
 enum LocalStorageKey {
   Songs = "Songs",
+  SongId = "SongId",
 }
 
 function useSongs() {
@@ -29,16 +32,37 @@ function useSongs() {
     setValue([]);
   }, [setValue]);
 
+  const [nextId, setNextId] = useLocalStorage<number>(
+    LocalStorageKey.SongId,
+    1
+  );
+
+  const getNextId = useCallback(() => {
+    const result = nextId;
+
+    setNextId(nextId + 1);
+
+    return result;
+  }, [nextId, setNextId]);
+
   return {
     songs: value,
     setSongs: setValue,
     resetSongs,
+    getNextId,
   };
 }
 
 export function SongList() {
-  const { songs, setSongs, resetSongs } = useSongs();
-  const { items, promoteItem, demoteItem, addItem } = useRankedList(songs);
+  const { songs, setSongs, resetSongs, getNextId } = useSongs();
+  const {
+    items,
+    promoteItem,
+    demoteItem,
+    addItem,
+    moveItemToTop,
+    moveItemToBottom,
+  } = useRankedList(songs);
 
   useEffect(() => {
     setSongs(items);
@@ -46,11 +70,11 @@ export function SongList() {
 
   const onSubmit = useCallback(
     (newSong: NewSong, formikHelpers: FormikHelpers<NewSong>) => {
-      addItem(createSong(newSong));
+      addItem(createSong(newSong, getNextId()));
 
       formikHelpers.resetForm();
     },
-    [addItem]
+    [addItem, getNextId]
   );
 
   const { handleSubmit, handleChange, handleBlur, values } = useNewSongForm({
@@ -104,11 +128,17 @@ export function SongList() {
                 <Stack direction="row" alignItems="center">
                   <ListItemText sx={{ mr: 3 }} secondary={i + 1} />
                   <Stack direction="row" alignItems="center">
+                    <IconButton onClick={() => moveItemToTop(song)}>
+                      <VerticalAlignTopIcon />
+                    </IconButton>
                     <IconButton onClick={() => promoteItem(song)}>
                       <KeyboardArrowUpIcon />
                     </IconButton>
                     <IconButton onClick={() => demoteItem(song)}>
                       <KeyboardArrowDownIcon />
+                    </IconButton>
+                    <IconButton onClick={() => moveItemToBottom(song)}>
+                      <VerticalAlignBottomIcon />
                     </IconButton>
                   </Stack>
                   <SongListItemLabel song={song} />
