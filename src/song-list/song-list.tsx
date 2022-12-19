@@ -14,6 +14,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React, { useCallback, useState } from "react";
 import { useNewSongForm } from "../use-new-song-form";
 import { NewSong, Song } from "../song";
@@ -23,6 +24,7 @@ export function SongList() {
   const {
     songs,
     createSong,
+    removeSong,
     promoteSong,
     demoteSong,
     moveSongToBottom,
@@ -77,7 +79,7 @@ export function SongList() {
           <Button type="submit" variant="outlined">
             New
           </Button>
-          <Button type="submit" variant="outlined" onClick={printState}>
+          <Button variant="outlined" onClick={printState}>
             Print
           </Button>
         </Stack>
@@ -101,6 +103,9 @@ export function SongList() {
                     </IconButton>
                     <IconButton onClick={() => moveSongToBottom(song)}>
                       <VerticalAlignBottomIcon />
+                    </IconButton>
+                    <IconButton onClick={() => removeSong(song)}>
+                      <DeleteForeverIcon />
                     </IconButton>
                   </Stack>
                   <SongListItemLabel song={song} />
