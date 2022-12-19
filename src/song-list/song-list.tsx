@@ -7,6 +7,7 @@ import {
   IconButton,
   Button,
   TextField,
+  ListItemTextProps,
 } from "@mui/material";
 import { FormikHelpers } from "formik";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -110,16 +111,109 @@ export function SongList() {
                       <KeyboardArrowDownIcon />
                     </IconButton>
                   </Stack>
-                  <Stack direction="column">
-                    <ListItemText primary={song.name ?? "(no name)"} />
-                    <ListItemText secondary={song.artist ?? "(no artist)"} />
-                  </Stack>
+                  <SongListItemLabel song={song} />
                 </Stack>
               </ListItem>
             ))}
           </List>
         ) : null}
       </Card>
+    </Stack>
+  );
+}
+
+type EditableListItemTextProps = {
+  onChange: (value: string) => void;
+} & ListItemTextProps;
+
+function EditableListItemText(props: EditableListItemTextProps) {
+  const { ...passthrough } = props;
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [fieldValue, setFieldValue] = useState("");
+
+  // Input change handler
+  const handleFieldValueChange = useCallback<
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+  >((ev) => {
+    setFieldValue(ev.target.value);
+  }, []);
+
+  // Input blur handler
+  const handleFieldValueBlur = useCallback<
+    React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
+  >((ev) => {
+    setIsEditing(false);
+  }, []);
+
+  // Start editing mode with a value
+  const beginEdit = useCallback(
+    (value: string) => {
+      setFieldValue(value);
+      setIsEditing(true);
+    },
+    [setIsEditing]
+  );
+
+  // Finish editing mode with the new value
+  const finishEdit = useCallback((value: string) => {
+    if (value != null) {
+      setFieldValue(value);
+    }
+    setIsEditing(false);
+  }, []);
+
+  // Handle Form Submit
+  const handleSubmit = useCallback<React.FormEventHandler<HTMLFormElement>>(
+    (ev) => {
+      finishEdit(fieldValue);
+    },
+    [finishEdit, fieldValue]
+  );
+
+  const handleClickPrimary = useCallback<
+    React.MouseEventHandler<HTMLDivElement>
+  >(
+    (ev) => {
+      beginEdit(ev.currentTarget.innerText);
+    },
+    [beginEdit]
+  );
+
+  return isEditing ? (
+    <Stack direction="row" component="form" onSubmit={handleSubmit}>
+      <TextField
+        name="name"
+        variant="outlined"
+        size="small"
+        value={fieldValue}
+        onChange={handleFieldValueChange}
+        onBlur={handleFieldValueBlur}
+      />
+    </Stack>
+  ) : (
+    <ListItemText {...passthrough} onClick={handleClickPrimary} />
+  );
+}
+
+// function useEditText() {}
+
+interface SongListItemLabelProps {
+  song: Song;
+}
+
+function SongListItemLabel(props: SongListItemLabelProps) {
+  const { song } = props;
+  return (
+    <Stack direction="column">
+      <EditableListItemText
+        primary={song.name ?? "(no name)"}
+        onChange={console.log}
+      />
+      <EditableListItemText
+        secondary={song.artist ?? "(no artist)"}
+        onChange={console.log}
+      />
     </Stack>
   );
 }
