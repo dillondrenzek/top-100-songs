@@ -1,8 +1,8 @@
 import { Stack, Button, TextField } from "@mui/material";
 import { FormikHelpers } from "formik";
 import React, { useCallback } from "react";
-import { useNewSongForm } from "../use-new-song-form";
-import { NewSong } from "../song";
+import { useNewSongForm } from "../../use-new-song-form";
+import { NewSong } from "../../song";
 
 interface NewSongFormProps {
   onSubmit: (newSong: NewSong) => void;

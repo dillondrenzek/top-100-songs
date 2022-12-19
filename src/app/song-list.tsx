@@ -14,7 +14,7 @@ import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React from "react";
 import { useSongs } from "../use-songs";
-import { NewSongForm } from "./new-song-form";
+import { NewSongForm } from "./song-list/new-song-form";
 
 export function SongList() {
   const {

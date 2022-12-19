@@ -1,7 +1,14 @@
 {
   "version": 1,
-  "nextId": 46,
+  "nextId": 50,
   "songs": [
+    {
+      "id": 47,
+      "count": 0,
+      "name": "Soon the New Day",
+      "artist": "Talib Kweli"
+    },
+    { "id": 46, "count": 0, "name": "Skinny Love", "artist": "Bon Iver" },
     {
       "id": 11,
       "count": 0,
@@ -11,6 +18,12 @@
     { "id": 42, "count": 0, "name": "Chariot", "artist": "Gavin Degraw" },
     { "id": 22, "count": 0, "name": "Runnin'", "artist": "The Pharcyde" },
     { "id": 41, "count": 0, "name": "Undeniable", "artist": "Matt Kearney" },
+    {
+      "id": 48,
+      "count": 0,
+      "name": "Golden Hour",
+      "artist": "Kacey Musgraves"
+    },
     { "id": 21, "count": 0, "name": "Heartbreaker", "artist": "John Legend" },
     {
       "id": 45,
@@ -18,6 +31,7 @@
       "name": "Stay High (Hippie Sabotage Remix)",
       "artist": "Tove Lo, Hippie Sabotage"
     },
+    { "id": 49, "count": 0, "name": "Heat Waves", "artist": "Glass Animals" },
     {
       "id": 27,
       "count": 0,
@@ -83,13 +97,13 @@
       "artist": "Collie Buddz"
     },
     { "id": 19, "count": 0, "name": "Cold Air", "artist": "The Hics" },
+    { "id": 17, "count": 0, "name": "Fears", "artist": "MTNS" },
     {
       "id": 18,
       "count": 0,
       "name": "Killing Me Softly",
       "artist": "The Fugees"
     },
-    { "id": 17, "count": 0, "name": "Fears", "artist": "MTNS" },
     { "id": 30, "count": 0, "name": "Practice", "artist": "DJ Jazzy Jeff" },
     { "id": 32, "count": 0, "name": "We Are Young", "artist": "Fun." }
   ]

@@ -1,6 +1,6 @@
 import { Box, Stack } from "@mui/material";
 import React from "react";
-import { SongList } from "./song-list/song-list";
+import { SongList } from "./app/song-list";
 import { AppThemeProvider } from "./theme";
 
 export default function App() {
