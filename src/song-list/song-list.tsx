@@ -14,113 +14,21 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
-import React, {
-  Reducer,
-  useCallback,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import React, { useCallback, useState } from "react";
 import { useNewSongForm } from "../use-new-song-form";
 import { NewSong, Song } from "../song";
-import { useRankedList } from "../use-ranked-list";
-import { useLocalStorage } from "usehooks-ts";
-
-enum LocalStorageKey {
-  Songs = "Songs",
-  SongId = "SongId",
-  SongsDataState = "SongsDataState",
-}
-
-type SongsReducerAction =
-  | { type: "INCREMENT_NEXT_ID" }
-  | { type: "SET_SONGS"; payload: Song[] }
-  | { type: "CREATE_SONG"; payload: NewSong };
-
-interface SongsDataState {
-  version: number;
-  nextId: number;
-  songs: Song[];
-}
-
-function useSongs() {
-  const version = 1;
-
-  const [storedState, setStoredState] = useLocalStorage<SongsDataState>(
-    LocalStorageKey.SongsDataState,
-    {
-      version,
-      nextId: 1,
-      songs: [],
-    }
-  );
-
-  const [state, dispatch] = useReducer<
-    Reducer<SongsDataState, SongsReducerAction>
-  >((prevState, action) => {
-    switch (action.type) {
-      case "CREATE_SONG": {
-        const newSong: Song = {
-          id: prevState.nextId,
-          count: 0,
-          ...action.payload,
-        };
-        return {
-          ...prevState,
-          id: prevState.nextId + 1,
-          songs: [newSong, ...prevState.songs],
-        };
-      }
-
-      case "SET_SONGS": {
-        return {
-          ...prevState,
-          songs: action.payload,
-        };
-      }
-
-      default:
-        return prevState;
-    }
-  }, storedState);
-
-  // Update LocalStorage when state changes
-  useEffect(() => {
-    setStoredState(state);
-  }, [setStoredState, state]);
-
-  const createSong = useCallback((newSong: NewSong) => {
-    dispatch({
-      type: "CREATE_SONG",
-      payload: newSong,
-    });
-  }, []);
-
-  const setSongs = useCallback((newSongs: Song[]) => {
-    dispatch({ type: "SET_SONGS", payload: newSongs });
-  }, []);
-
-  const printState = useCallback(() => {
-    console.log(state);
-    console.log(JSON.stringify(state));
-  }, [state]);
-
-  return {
-    songs: state.songs,
-    setSongs,
-    createSong,
-    printState,
-  };
-}
+import { useSongs } from "../use-songs";
 
 export function SongList() {
-  const { songs, setSongs, createSong, printState } = useSongs();
-  const { items, promoteItem, demoteItem, moveItemToTop, moveItemToBottom } =
-    useRankedList(songs);
-
-  useEffect(() => {
-    setSongs(items);
-  }, [items, setSongs]);
+  const {
+    songs,
+    createSong,
+    promoteSong,
+    demoteSong,
+    moveSongToBottom,
+    moveSongToTop,
+    printState,
+  } = useSongs();
 
   const onSubmit = useCallback(
     (newSong: NewSong, formikHelpers: FormikHelpers<NewSong>) => {
@@ -175,23 +83,23 @@ export function SongList() {
         </Stack>
       </Card>
       <Card sx={{ width: "100%", px: 1, py: 1 }}>
-        {items.length ? (
+        {songs.length ? (
           <List>
-            {items.map((song, i) => (
+            {songs.map((song, i) => (
               <ListItem key={i}>
                 <Stack direction="row" alignItems="center">
                   <ListItemText sx={{ mr: 3 }} secondary={i + 1} />
                   <Stack direction="row" alignItems="center">
-                    <IconButton onClick={() => moveItemToTop(song)}>
+                    <IconButton onClick={() => moveSongToTop(song)}>
                       <VerticalAlignTopIcon />
                     </IconButton>
-                    <IconButton onClick={() => promoteItem(song)}>
+                    <IconButton onClick={() => promoteSong(song)}>
                       <KeyboardArrowUpIcon />
                     </IconButton>
-                    <IconButton onClick={() => demoteItem(song)}>
+                    <IconButton onClick={() => demoteSong(song)}>
                       <KeyboardArrowDownIcon />
                     </IconButton>
-                    <IconButton onClick={() => moveItemToBottom(song)}>
+                    <IconButton onClick={() => moveSongToBottom(song)}>
                       <VerticalAlignBottomIcon />
                     </IconButton>
                   </Stack>
