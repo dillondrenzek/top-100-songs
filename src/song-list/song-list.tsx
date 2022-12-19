@@ -6,18 +6,15 @@ import {
   Stack,
   IconButton,
   Button,
-  TextField,
 } from "@mui/material";
-import { FormikHelpers } from "formik";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import React, { useCallback } from "react";
-import { useNewSongForm } from "../use-new-song-form";
-import { NewSong, Song } from "../song";
+import React from "react";
 import { useSongs } from "../use-songs";
+import { NewSongForm } from "./new-song-form";
 
 export function SongList() {
   const {
@@ -31,57 +28,13 @@ export function SongList() {
     printState,
   } = useSongs();
 
-  const onSubmit = useCallback(
-    (newSong: NewSong, formikHelpers: FormikHelpers<NewSong>) => {
-      createSong(newSong);
-
-      formikHelpers.resetForm();
-    },
-    [createSong]
-  );
-
-  const { handleSubmit, handleChange, handleBlur, values } = useNewSongForm({
-    initialValues: {
-      name: "",
-      artist: "",
-    },
-    onSubmit,
-  });
-
   return (
     <Stack direction="column" alignItems="flex-start" spacing={2}>
       <Card sx={{ px: 3, py: 2 }}>
-        <Stack
-          direction="row"
-          spacing={2}
-          component="form"
-          onSubmit={handleSubmit}
-        >
-          <TextField
-            tabIndex={0}
-            name="name"
-            label="Name"
-            variant="outlined"
-            value={values.name}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <TextField
-            tabIndex={1}
-            name="artist"
-            label="Artist"
-            variant="outlined"
-            value={values.artist}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <Button type="submit" variant="outlined">
-            New
-          </Button>
-          <Button variant="outlined" onClick={printState}>
-            Print
-          </Button>
-        </Stack>
+        <NewSongForm onSubmit={createSong} />
+        <Button variant="outlined" onClick={printState}>
+          Print
+        </Button>
       </Card>
       <Card sx={{ width: "100%", px: 1, py: 1 }}>
         {songs.length ? (
