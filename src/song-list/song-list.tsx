@@ -14,7 +14,13 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  Reducer,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { useNewSongForm } from "../use-new-song-form";
 import { NewSong, createSong, Song } from "../song";
 import { useRankedList } from "../use-ranked-list";
@@ -23,38 +29,78 @@ import { useLocalStorage } from "usehooks-ts";
 enum LocalStorageKey {
   Songs = "Songs",
   SongId = "SongId",
+  SongsDataState = "SongsDataState",
+}
+
+type SongsReducerAction =
+  | { type: "INCREMENT_NEXT_ID" }
+  | { type: "SET_SONGS"; payload: Song[] };
+
+interface SongsDataState {
+  version: number;
+  nextId: number;
+  songs: Song[];
 }
 
 function useSongs() {
-  const [value, setValue] = useLocalStorage<Song[]>(LocalStorageKey.Songs, []);
+  const version = 1;
 
-  const resetSongs = useCallback(() => {
-    setValue([]);
-  }, [setValue]);
-
-  const [nextId, setNextId] = useLocalStorage<number>(
-    LocalStorageKey.SongId,
-    1
+  const [storedState, setStoredState] = useLocalStorage<SongsDataState>(
+    LocalStorageKey.SongsDataState,
+    {
+      version,
+      nextId: 1,
+      songs: [],
+    }
   );
 
+  const [state, dispatch] = useReducer<
+    Reducer<SongsDataState, SongsReducerAction>
+  >((prevState, action) => {
+    switch (action.type) {
+      case "SET_SONGS": {
+        return {
+          ...prevState,
+          songs: action.payload,
+        };
+      }
+
+      case "INCREMENT_NEXT_ID": {
+        return {
+          ...prevState,
+          nextId: prevState.nextId + 1,
+        };
+      }
+
+      default:
+        return prevState;
+    }
+  }, storedState);
+
+  // Update LocalStorage when state changes
+  useEffect(() => {
+    setStoredState(state);
+  }, [setStoredState, state]);
+
+  const setSongs = useCallback((newSongs: Song[]) => {
+    dispatch({ type: "SET_SONGS", payload: newSongs });
+  }, []);
+
   const getNextId = useCallback(() => {
-    const result = nextId;
-
-    setNextId(nextId + 1);
-
+    const result = state.nextId;
+    dispatch({ type: "INCREMENT_NEXT_ID" });
     return result;
-  }, [nextId, setNextId]);
+  }, [state.nextId]);
 
   return {
-    songs: value,
-    setSongs: setValue,
-    resetSongs,
+    songs: state.songs,
+    setSongs,
     getNextId,
   };
 }
 
 export function SongList() {
-  const { songs, setSongs, resetSongs, getNextId } = useSongs();
+  const { songs, setSongs, getNextId } = useSongs();
   const {
     items,
     promoteItem,
@@ -114,9 +160,6 @@ export function SongList() {
           />
           <Button type="submit" variant="outlined">
             New
-          </Button>
-          <Button variant="outlined" color="error" onClick={resetSongs}>
-            Reset List
           </Button>
         </Stack>
       </Card>
