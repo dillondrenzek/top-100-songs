@@ -14,9 +14,11 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CreateIcon from "@mui/icons-material/Create";
 import React from "react";
 import { useSongs } from "../use-songs";
 import { NewSongForm } from "./song-list/new-song-form";
+import { useNavigate } from "react-router-dom";
 
 export function SongList() {
   const {
@@ -29,6 +31,8 @@ export function SongList() {
     moveSongToTop,
     printState,
   } = useSongs();
+
+  const navigate = useNavigate();
 
   return (
     <Stack direction="column" alignItems="flex-start" spacing={2}>
@@ -70,6 +74,9 @@ export function SongList() {
                     </IconButton>
                     <IconButton onClick={() => removeSong(song)}>
                       <DeleteForeverIcon />
+                    </IconButton>
+                    <IconButton onClick={() => navigate(`/songs/${song.id}`)}>
+                      <CreateIcon />
                     </IconButton>
                   </Stack>
                   <Stack direction="column">

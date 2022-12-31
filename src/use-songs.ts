@@ -108,6 +108,13 @@ export function useSongs() {
 
   // Public API
 
+  const getSongById = useCallback(
+    (id: number) => {
+      return state.songs.find((item) => item.id === id);
+    },
+    [state.songs]
+  );
+
   const createSong = useCallback((newSong: NewSong) => {
     dispatch({
       type: "CREATE_SONG",
@@ -162,6 +169,7 @@ export function useSongs() {
   return {
     songs: state.songs,
     setSongs,
+    getSongById,
     createSong,
     removeSong,
     promoteSong,
