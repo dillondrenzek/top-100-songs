@@ -32,12 +32,21 @@ export function SongList() {
 
   return (
     <Stack direction="column" alignItems="flex-start" spacing={2}>
-      <Card sx={{ px: 3, py: 2 }}>
-        <NewSongForm onSubmit={createSong} />
-        <Button variant="outlined" onClick={printState}>
-          Print
-        </Button>
-      </Card>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+        spacing={2}
+      >
+        <Card sx={{ px: 3, py: 2 }}>
+          <NewSongForm onSubmit={createSong} />
+        </Card>
+        <Card sx={{}}>
+          <Button variant="outlined" onClick={printState}>
+            Print
+          </Button>
+        </Card>
+      </Stack>
       <Box>
         <Typography>{songs.length} songs</Typography>
       </Box>
