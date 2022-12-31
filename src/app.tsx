@@ -15,7 +15,7 @@ export default function App() {
   return (
     <AppThemeProvider>
       <Stack
-        sx={{ width: "100%", background: "error.main" }}
+        sx={{ width: "100%", background: "#eee" }}
         direction="column"
         alignItems="center"
       >

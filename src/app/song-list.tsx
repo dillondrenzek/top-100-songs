@@ -46,10 +46,8 @@ export function SongList() {
             Print
           </Button>
         </Card>
-      </Stack>
-      <Box>
         <Typography>{songs.length} songs</Typography>
-      </Box>
+      </Stack>
       <Card sx={{ width: "100%", px: 1, py: 1 }}>
         {songs.length ? (
           <List>
