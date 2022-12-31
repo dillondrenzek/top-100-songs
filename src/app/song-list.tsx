@@ -6,7 +6,6 @@ import {
   Stack,
   IconButton,
   Button,
-  Box,
   Typography,
 } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";

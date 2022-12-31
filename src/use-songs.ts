@@ -16,6 +16,7 @@ type SongsReducerAction =
   | { type: "MOVE_SONG_TO_TOP"; payload: Song }
   | { type: "MOVE_SONG_TO_BOTTOM"; payload: Song }
   | { type: "CREATE_SONG"; payload: NewSong }
+  | { type: "UPDATE_SONG"; payload: Song }
   | { type: "REMOVE_SONG"; payload: Song };
 
 interface SongsDataState {
@@ -51,6 +52,19 @@ export function useSongs() {
           ...prevState,
           nextId: prevState.nextId + 1,
           songs: [newSong, ...prevState.songs],
+        };
+      }
+
+      case "UPDATE_SONG": {
+        const id = action.payload.id;
+
+        const index = prevState.songs.findIndex((value) => value.id === id);
+        const newSongs = [...prevState.songs];
+        newSongs[index] = { ...action.payload };
+
+        return {
+          ...prevState,
+          songs: [...newSongs],
         };
       }
 
@@ -115,6 +129,13 @@ export function useSongs() {
     [state.songs]
   );
 
+  const updateSong = useCallback((song: Song) => {
+    dispatch({
+      type: "UPDATE_SONG",
+      payload: song,
+    });
+  }, []);
+
   const createSong = useCallback((newSong: NewSong) => {
     dispatch({
       type: "CREATE_SONG",
@@ -170,6 +191,7 @@ export function useSongs() {
     songs: state.songs,
     setSongs,
     getSongById,
+    updateSong,
     createSong,
     removeSong,
     promoteSong,

@@ -1,16 +1,17 @@
-import { Button, Card, Stack, Typography } from "@mui/material";
+import { Button, Card, Stack } from "@mui/material";
 import React, { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSongs } from "../use-songs";
+import { EditSongForm } from "./edit-song-page/edit-song-form";
 
 export function EditSongPage() {
-  const { getSongById } = useSongs();
+  const { getSongById, updateSong } = useSongs();
 
   const { songId } = useParams();
 
   const song = useMemo(() => {
     if (!songId) {
-      return null;
+      return;
     }
 
     const id = parseInt(songId);
@@ -27,15 +28,14 @@ export function EditSongPage() {
         alignItems="center"
         justifyContent="center"
         spacing={2}
-      >
+      ></Stack>
+      <Card sx={{ width: "100%", px: 1, py: 1 }}>
         <Button variant="outlined" onClick={() => navigate("/")}>
           Home
         </Button>
-      </Stack>
+      </Card>
       <Card sx={{ width: "100%", px: 1, py: 1 }}>
-        <Typography>{songId}</Typography>
-        <Typography>{song?.name}</Typography>
-        <Typography>{song?.artist}</Typography>
+        <EditSongForm initialValue={song} onSubmit={updateSong} />
       </Card>
     </Stack>
   );
