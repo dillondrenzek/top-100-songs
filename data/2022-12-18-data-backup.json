@@ -2,9 +2,19 @@
   "version": 1,
   "nextId": 51,
   "songs": [
-    { "id": 11, "name": "How Far We've Come", "artist": "Matchbox Twenty" },
+    {
+      "id": 11,
+      "name": "How Far We've Come",
+      "spotifyId": "0gbLfFlEyVHiKzlZIb0gce",
+      "artist": "Matchbox Twenty"
+    },
     { "id": 47, "name": "Soon the New Day", "artist": "Talib Kweli" },
-    { "id": 42, "name": "Chariot", "artist": "Gavin Degraw" },
+    {
+      "id": 42,
+      "spotifyId": "08kTO4EW0jb07zNsCNM83w",
+      "name": "Chariot",
+      "artist": "Gavin Degraw"
+    },
     { "id": 22, "name": "Runnin'", "artist": "The Pharcyde" },
     { "id": 41, "name": "Undeniable", "artist": "Matt Kearney" },
     { "id": 50, "name": "Save Room", "artist": "John Legend" },
@@ -33,7 +43,12 @@
     { "id": 14, "name": "Only One", "artist": "Yellowcard" },
     { "id": 44, "name": "Keep Her Close", "artist": "ODESZA" },
     { "id": 43, "name": "American Girls", "artist": "Counting Crows" },
-    { "id": 40, "name": "Live Well", "artist": "Palace" },
+    {
+      "id": 40,
+      "name": "Live Well",
+      "artist": "Palace",
+      "spotifyId": "2H30WL3exSctlDC9GyRbD4"
+    },
     { "id": 38, "name": "Celebrate", "artist": "Cassidy" },
     { "id": 37, "name": "The Fire", "artist": "The Roots" },
     { "id": 36, "name": "UMI Says", "artist": "Mos Def" },
