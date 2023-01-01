@@ -14,10 +14,11 @@ import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CreateIcon from "@mui/icons-material/Create";
-import React from "react";
+import React, { useState } from "react";
 import { useSongs } from "../use-songs";
 import { NewSongForm } from "./song-list/new-song-form";
 import { useNavigate } from "react-router-dom";
+import { PlayCircleOutline } from "@mui/icons-material";
 
 export function SongList() {
   const {
@@ -32,6 +33,13 @@ export function SongList() {
   } = useSongs();
 
   const navigate = useNavigate();
+
+  // How far we've come - https://open.spotify.com/track/0gbLfFlEyVHiKzlZIb0gce?si=85ef49997bfc4070
+  // Chariot - https://open.spotify.com/track/08kTO4EW0jb07zNsCNM83w?si=860c8155a8e4405c
+
+  const [playerSpotifyId, setPlayerSpotifyId] = useState(
+    "2H30WL3exSctlDC9GyRbD4"
+  );
 
   return (
     <Stack direction="column" alignItems="flex-start" spacing={2}>
@@ -51,6 +59,17 @@ export function SongList() {
         </Card>
         <Typography>{songs.length} songs</Typography>
       </Stack>
+      <Card>
+        <iframe
+          title="Spotify Player"
+          src={`https://open.spotify.com/embed/track/${playerSpotifyId}`}
+          width="100%"
+          height="152"
+          frameBorder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        ></iframe>
+      </Card>
       <Card sx={{ width: "100%", px: 1, py: 1 }}>
         {songs.length ? (
           <List>
@@ -77,8 +96,14 @@ export function SongList() {
                     <IconButton onClick={() => navigate(`/songs/${song.id}`)}>
                       <CreateIcon />
                     </IconButton>
+                    <IconButton
+                      disabled={!song.spotifyId}
+                      onClick={() => setPlayerSpotifyId(song?.spotifyId ?? "")}
+                    >
+                      <PlayCircleOutline />
+                    </IconButton>
                   </Stack>
-                  <Stack direction="column">
+                  <Stack direction="row" spacing={1} alignItems="baseline">
                     <ListItemText primary={song.name} />
                     <ListItemText secondary={song.artist} />
                   </Stack>

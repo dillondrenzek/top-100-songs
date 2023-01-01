@@ -71,6 +71,15 @@ export function EditSongForm(props: EditSongFormProps) {
         onChange={handleChange}
         onBlur={handleBlur}
       />
+      <TextField
+        tabIndex={2}
+        name="spotifyId"
+        label="Spotify ID"
+        variant="outlined"
+        value={values.spotifyId}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
       <Button type="submit" variant="outlined">
         Save
       </Button>
