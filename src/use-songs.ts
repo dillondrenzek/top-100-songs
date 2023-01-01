@@ -17,7 +17,8 @@ type SongsReducerAction =
   | { type: "MOVE_SONG_TO_BOTTOM"; payload: Song }
   | { type: "CREATE_SONG"; payload: NewSong }
   | { type: "UPDATE_SONG"; payload: Song }
-  | { type: "REMOVE_SONG"; payload: Song };
+  | { type: "REMOVE_SONG"; payload: Song }
+  | { type: "RESET_STATE" };
 
 interface SongsDataState {
   version: number;
@@ -27,6 +28,12 @@ interface SongsDataState {
 
 export function useSongs() {
   const version = 1;
+
+  const defaultState: SongsDataState = {
+    version,
+    nextId: 1,
+    songs: [],
+  };
 
   // Local Storage
   const [storedState, setStoredState] = useLocalStorage<SongsDataState>(
@@ -107,6 +114,12 @@ export function useSongs() {
         return {
           ...prevState,
           songs: action.payload,
+        };
+      }
+
+      case "RESET_STATE": {
+        return {
+          ...defaultState,
         };
       }
 
