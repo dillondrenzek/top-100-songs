@@ -42,24 +42,8 @@ export function SongList() {
   );
 
   return (
-    <Stack direction="column" alignItems="flex-start" spacing={2}>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        spacing={2}
-      >
-        <Card sx={{ px: 3, py: 2 }}>
-          <NewSongForm onSubmit={createSong} />
-        </Card>
-        <Card sx={{}}>
-          <Button variant="outlined" onClick={printState}>
-            Print
-          </Button>
-        </Card>
-        <Typography>{songs.length} songs</Typography>
-      </Stack>
-      <Card>
+    <Stack direction="column" alignItems="stretch" spacing={2} marginY={2}>
+      <Card sx={{ display: "flex", borderRadius: 3 }}>
         <iframe
           title="Spotify Player"
           src={`https://open.spotify.com/embed/track/${playerSpotifyId}`}
@@ -70,7 +54,18 @@ export function SongList() {
           loading="lazy"
         ></iframe>
       </Card>
-      <Card sx={{ width: "100%", px: 1, py: 1 }}>
+      <Card sx={{ px: 3, py: 2 }}>
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <Button variant="outlined" onClick={printState}>
+            Print
+          </Button>
+          <Typography>{songs.length} songs</Typography>
+        </Stack>
+      </Card>
+      <Card sx={{ px: 3, py: 2 }}>
+        <NewSongForm allSongs={songs} onSubmit={createSong} />
+      </Card>
+      <Card sx={{ px: 1, py: 1 }}>
         {songs.length ? (
           <List>
             {songs.map((song, i) => (
