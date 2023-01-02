@@ -27,7 +27,6 @@ type SongAutocompleteProps = {
 function SongAutocomplete(props: SongAutocompleteProps) {
   const { label, allSongs, name, getValue, ...passthrough } = props;
   const options = useMemo<string[]>(() => {
-    // allSongs as Song[];
     return allSongs.map(getValue);
   }, [allSongs, getValue]);
 
