@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "nextId": 51,
+  "nextId": 56,
   "songs": [
     {
       "id": 11,
@@ -22,18 +22,27 @@
     {
       "id": 45,
       "name": "Stay High (Hippie Sabotage Remix)",
-      "artist": "Tove Lo, Hippie Sabotage"
+      "artist": "Tove Lo, Hippie Sabotage",
+      "spotifyId": "43aBKep8IGxMizKCSvKJcJ"
     },
     {
       "id": 27,
       "name": "Lights (Bassnectar Remix)",
       "artist": "Ellie Goulding, Bassnectar"
     },
-    { "id": 39, "name": "Save Tonight", "artist": "Eagle-Eyed Cherry" },
+    { "id": 55, "name": "Space Forest", "artist": "Kill Paris" },
+    {
+      "id": 52,
+      "name": "All Fall Down",
+      "artist": "Camo & Krooked",
+      "spotifyId": "3ai99OqgW33tw5T3bgoIT6"
+    },
     { "id": 16, "name": "Bohemian Like You", "artist": "The Dandy Warhols" },
     { "id": 12, "name": "Feather", "artist": "Nujabes" },
+    { "id": 39, "name": "Save Tonight", "artist": "Eagle-Eyed Cherry" },
     { "id": 49, "name": "Heat Waves", "artist": "Glass Animals" },
     { "id": 48, "name": "Golden Hour", "artist": "Kacey Musgraves" },
+    { "id": 54, "name": "Wake Up", "artist": "Petit Biscuit" },
     { "id": 46, "name": "Skinny Love", "artist": "Bon Iver" },
     { "id": 23, "name": "Coolie High", "artist": "Camp Lo" },
     { "id": 26, "name": "Chasing Heaven", "artist": "Bassnectar" },
