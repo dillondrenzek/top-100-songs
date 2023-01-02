@@ -14,15 +14,17 @@ import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CreateIcon from "@mui/icons-material/Create";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSongs } from "../use-songs";
 import { NewSongForm } from "./song-list/new-song-form";
 import { useNavigate } from "react-router-dom";
 import { PlayCircleOutline } from "@mui/icons-material";
+import { useCopyToClipboard, useTimeout } from "usehooks-ts";
 
 export function SongList() {
   const {
     songs,
+    state,
     createSong,
     removeSong,
     promoteSong,
@@ -34,12 +36,25 @@ export function SongList() {
 
   const navigate = useNavigate();
 
+  const [copiedValue, copyValue] = useCopyToClipboard();
+
   // How far we've come - https://open.spotify.com/track/0gbLfFlEyVHiKzlZIb0gce?si=85ef49997bfc4070
   // Chariot - https://open.spotify.com/track/08kTO4EW0jb07zNsCNM83w?si=860c8155a8e4405c
 
   const [playerSpotifyId, setPlayerSpotifyId] = useState(
     "2H30WL3exSctlDC9GyRbD4"
   );
+
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleClickCopy = useCallback(() => {
+    copyValue(JSON.stringify(state));
+    setIsCopied(true);
+
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 10000);
+  }, [copyValue, state]);
 
   return (
     <Stack direction="column" alignItems="stretch" spacing={2} marginY={2}>
@@ -57,7 +72,14 @@ export function SongList() {
       <Card sx={{ px: 3, py: 2 }}>
         <Stack direction="row" alignItems="center" spacing={2}>
           <Button variant="outlined" onClick={printState}>
-            Print
+            Print to Console
+          </Button>
+          <Button
+            variant="outlined"
+            color={isCopied ? "success" : "primary"}
+            onClick={handleClickCopy}
+          >
+            {isCopied ? "Copied!" : "Copy State"}
           </Button>
           <Typography>{songs.length} songs</Typography>
         </Stack>

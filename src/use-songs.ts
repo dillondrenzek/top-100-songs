@@ -201,7 +201,9 @@ export function useSongs() {
   }, [state]);
 
   return {
+    state,
     songs: state.songs,
+
     setSongs,
     getSongById,
     updateSong,
