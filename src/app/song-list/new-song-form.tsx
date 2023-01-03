@@ -1,4 +1,10 @@
-import { Stack, Button } from "@mui/material";
+import {
+  Stack,
+  Button,
+  Autocomplete,
+  TextField,
+  UseAutocompleteProps,
+} from "@mui/material";
 import { FormikHelpers, useFormik } from "formik";
 import React, { useCallback } from "react";
 import { NewSong, Song } from "../../song";
@@ -49,23 +55,15 @@ export function NewSongForm(props: NewSongFormProps) {
       <Stack direction="row" spacing={2} sx={{ flex: "1 1 auto" }}>
         <SongAutocomplete
           sx={{ flex: "1 1 auto" }}
-          name="name"
-          label="Name"
-          value={values.name}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          allSongs={allSongs}
-          getValue={(song) => song.name}
-        />
-        <SongAutocomplete
-          sx={{ flex: "1 1 auto" }}
-          name="artist"
-          label="Artist"
-          value={values.artist}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          allSongs={allSongs}
-          getValue={(song) => song.artist}
+          options={allSongs}
+          renderInput={(params) => <TextField {...params} />}
+          onChange={(...args) => console.log("CHANGE:", ...args)}
+          onInputChange={(...args) => console.log("INPUT CHANGE:", ...args)}
+          getOptionLabel={(option) =>
+            typeof option === "string"
+              ? option
+              : `${option.name} - ${option.artist}`
+          }
         />
       </Stack>
       <Button type="submit" variant="outlined">
