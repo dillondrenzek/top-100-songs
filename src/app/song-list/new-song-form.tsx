@@ -9,9 +9,9 @@ type NewSongFormModel = NewSong;
 interface NewSongFormProps {
   allSongs: Song[];
 
-  onSelectSong: (song: Song) => void;
+  onSelectSong?: (song: Song) => void;
 
-  onSubmitSong: (newSong: NewSong) => void;
+  onSubmitSong?: (newSong: NewSong) => void;
 
   onSubmit: (newSong: NewSong) => void;
 }
