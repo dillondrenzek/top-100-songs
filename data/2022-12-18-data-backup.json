@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "nextId": 56,
+  "nextId": 63,
   "songs": [
     {
       "id": 11,
@@ -68,6 +68,7 @@
       "name": "Stars Shine Brightest",
       "artist": "The Cunninlynguists"
     },
+    { "id": 58, "name": "Before She Said Hi", "artist": "Mario" },
     { "id": 31, "name": "Lean On", "artist": "Mø" },
     { "id": 29, "name": "Doing Me Wrong", "artist": "Popeska" },
     { "id": 28, "name": "G Train", "artist": "Thirdstory" },
