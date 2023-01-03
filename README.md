@@ -1,7 +1,14 @@
 # Top 100 Songs
 
+---
+
+## List
+
+- "Top 100" -> "Top N"
+- Bubble array (N + 1 -> max)
 
 ---
+
 # Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

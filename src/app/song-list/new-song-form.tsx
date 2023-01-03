@@ -1,49 +1,18 @@
-import {
-  Stack,
-  Button,
-  TextField,
-  Autocomplete,
-  AutocompleteProps,
-} from "@mui/material";
-import { FormikHelpers } from "formik";
-import React, { useCallback, useMemo } from "react";
-import { useNewSongForm } from "../../use-new-song-form";
+import { Stack, Button } from "@mui/material";
+import { FormikHelpers, useFormik } from "formik";
+import React, { useCallback } from "react";
 import { NewSong, Song } from "../../song";
+import { SongAutocomplete } from "./new-song-form/song-autocomplete";
 
-type SongFreeSoloAutocompleteProps = AutocompleteProps<
-  string,
-  false,
-  false,
-  true
->;
-
-type SongAutocompleteProps = {
-  name: string;
-  label: string;
-  allSongs: Song[];
-  getValue: (song: Song) => string;
-} & Omit<SongFreeSoloAutocompleteProps, "options" | "renderInput">;
-
-function SongAutocomplete(props: SongAutocompleteProps) {
-  const { label, allSongs, name, getValue, ...passthrough } = props;
-  const options = useMemo<string[]>(() => {
-    return allSongs.map(getValue);
-  }, [allSongs, getValue]);
-
-  return (
-    <Autocomplete
-      {...passthrough}
-      freeSolo
-      options={options}
-      renderInput={(params) => (
-        <TextField {...params} name={name} label={label} />
-      )}
-    />
-  );
-}
+type NewSongFormModel = NewSong;
 
 interface NewSongFormProps {
   allSongs: Song[];
+
+  onSelectSong: (song: Song) => void;
+
+  onSubmitSong: (newSong: NewSong) => void;
+
   onSubmit: (newSong: NewSong) => void;
 }
 
@@ -59,13 +28,15 @@ export function NewSongForm(props: NewSongFormProps) {
     [propsOnSubmit]
   );
 
-  const { handleSubmit, handleChange, handleBlur, values } = useNewSongForm({
+  const formik = useFormik<NewSongFormModel>({
     initialValues: {
       name: "",
       artist: "",
     },
     onSubmit,
   });
+
+  const { handleSubmit, handleChange, handleBlur, values } = formik;
 
   return (
     <Stack
