@@ -21,6 +21,19 @@ export interface Song {
 }
 
 /**
+ * Type Guard for `Song` model
+ * @param val unknown value
+ * @returns true if Song
+ */
+export function isSong(val: unknown): val is Song {
+  if (!val || typeof val !== "object") {
+    return false;
+  }
+
+  return "id" in val || "artist" in val || "name" in val;
+}
+
+/**
  * Properties required to create a new `Song` model
  */
 export type NewSong = Pick<Song, "name" | "artist">;

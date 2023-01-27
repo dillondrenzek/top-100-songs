@@ -1,16 +1,14 @@
-import {
-  Stack,
-  Button,
-  Autocomplete,
-  TextField,
-  UseAutocompleteProps,
-} from "@mui/material";
+import { Stack, Button, TextField } from "@mui/material";
 import { FormikHelpers, useFormik } from "formik";
 import React, { useCallback } from "react";
-import { NewSong, Song } from "../../song";
+import { isSong, NewSong, Song } from "../../song";
 import { SongAutocomplete } from "./new-song-form/song-autocomplete";
 
 const DEBUG = true;
+
+function songAsUserInput(song: Song): string {
+  return `${song.name} - ${song.artist}`;
+}
 
 function newSongFromUserInput(input: string): NewSong {
   if (!input) {
@@ -49,7 +47,7 @@ interface NewSongFormProps {
 }
 
 export function NewSongForm(props: NewSongFormProps) {
-  const { onSubmit: propsOnSubmit, allSongs } = props;
+  const { onSubmit: propsOnSubmit, allSongs, onSelectSong } = props;
 
   const onSubmit = useCallback(
     (
@@ -91,9 +89,9 @@ export function NewSongForm(props: NewSongFormProps) {
             if (DEBUG) {
               console.log("[EV]", "Change -", reason, "-", val);
             }
-            if (reason === "selectOption") {
+            if (reason === "selectOption" && isSong(val)) {
+              onSelectSong?.(val);
             }
-            // handleChange
           }}
           onInputChange={(ev, val, reason) => {
             if (DEBUG) {
@@ -102,9 +100,7 @@ export function NewSongForm(props: NewSongFormProps) {
             handleChange(ev);
           }}
           getOptionLabel={(option) =>
-            typeof option === "string"
-              ? option
-              : `${option.name} - ${option.artist}`
+            typeof option === "string" ? option : songAsUserInput(option)
           }
         />
       </Stack>
