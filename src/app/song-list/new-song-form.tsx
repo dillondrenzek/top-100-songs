@@ -10,7 +10,33 @@ import React, { useCallback } from "react";
 import { NewSong, Song } from "../../song";
 import { SongAutocomplete } from "./new-song-form/song-autocomplete";
 
-type NewSongFormModel = NewSong;
+const DEBUG = true;
+
+function newSongFromUserInput(input: string): NewSong {
+  if (!input) {
+    return {
+      artist: "",
+      name: "",
+    };
+  }
+
+  const splitSong = input.split("-");
+  if (splitSong.length === 2) {
+    return {
+      artist: splitSong[1],
+      name: splitSong[0],
+    };
+  }
+
+  return {
+    artist: "",
+    name: splitSong[0],
+  };
+}
+
+type NewSongFormModel = {
+  userInput: string;
+} & Partial<NewSong>;
 
 interface NewSongFormProps {
   allSongs: Song[];
@@ -26,8 +52,11 @@ export function NewSongForm(props: NewSongFormProps) {
   const { onSubmit: propsOnSubmit, allSongs } = props;
 
   const onSubmit = useCallback(
-    (newSong: NewSong, formikHelpers: FormikHelpers<NewSong>) => {
-      propsOnSubmit(newSong);
+    (
+      newSong: NewSongFormModel,
+      formikHelpers: FormikHelpers<NewSongFormModel>
+    ) => {
+      propsOnSubmit(newSongFromUserInput(newSong.userInput));
 
       formikHelpers.resetForm();
     },
@@ -38,6 +67,7 @@ export function NewSongForm(props: NewSongFormProps) {
     initialValues: {
       name: "",
       artist: "",
+      userInput: "",
     },
     onSubmit,
   });
@@ -46,7 +76,7 @@ export function NewSongForm(props: NewSongFormProps) {
 
   return (
     <Stack
-      sx={{ width: "100%" }}
+      sx={{ width: "600px" }}
       direction="row"
       spacing={2}
       component="form"
@@ -56,9 +86,21 @@ export function NewSongForm(props: NewSongFormProps) {
         <SongAutocomplete
           sx={{ flex: "1 1 auto" }}
           options={allSongs}
-          renderInput={(params) => <TextField {...params} />}
-          onChange={(...args) => console.log("CHANGE:", ...args)}
-          onInputChange={(...args) => console.log("INPUT CHANGE:", ...args)}
+          renderInput={(params) => <TextField name="userInput" {...params} />}
+          onChange={(ev, val, reason) => {
+            if (DEBUG) {
+              console.log("[EV]", "Change -", reason, "-", val);
+            }
+            if (reason === "selectOption") {
+            }
+            // handleChange
+          }}
+          onInputChange={(ev, val, reason) => {
+            if (DEBUG) {
+              console.log("[EV]", "Input Change -", reason, "-", val);
+            }
+            handleChange(ev);
+          }}
           getOptionLabel={(option) =>
             typeof option === "string"
               ? option
