@@ -197,7 +197,6 @@ export function useSongs() {
 
   const printState = useCallback(() => {
     console.log(state);
-    console.log(JSON.stringify(state));
   }, [state]);
 
   return {
