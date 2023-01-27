@@ -19,14 +19,8 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <AppThemeProvider>
-      <Stack
-        sx={{ width: "100%", height: "100%" }}
-        direction="column"
-        alignItems="center"
-      >
-        <Box sx={{ width: "50%" }}>
-          <RouterProvider router={router} />
-        </Box>
+      <Stack sx={{ width: "100%" }} direction="column">
+        <RouterProvider router={router} />
       </Stack>
     </AppThemeProvider>
   );
