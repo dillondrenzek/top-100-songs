@@ -19,7 +19,7 @@ import { useSongs } from "../use-songs";
 import { NewSongForm } from "./song-list/new-song-form";
 import { useNavigate } from "react-router-dom";
 import { PlayCircleOutline } from "@mui/icons-material";
-import { useCopyToClipboard, useTimeout } from "usehooks-ts";
+import { useCopyToClipboard } from "usehooks-ts";
 
 export function SongList() {
   const {
@@ -57,8 +57,16 @@ export function SongList() {
   }, [copyValue, state]);
 
   return (
-    <Stack direction="column" alignItems="stretch" spacing={2} marginY={2}>
-      <Card sx={{ display: "flex", borderRadius: 3 }}>
+    <Stack direction="column" alignItems="center" spacing={2} marginY={2}>
+      <Card
+        sx={{
+          display: "flex",
+          position: "absolute",
+          top: 0,
+          right: 0,
+          borderRadius: 3,
+        }}
+      >
         <iframe
           title="Spotify Player"
           src={`https://open.spotify.com/embed/track/${playerSpotifyId}`}
@@ -69,25 +77,33 @@ export function SongList() {
           loading="lazy"
         ></iframe>
       </Card>
-      <Card sx={{ px: 3, py: 2 }}>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Button variant="outlined" onClick={printState}>
-            Print to Console
-          </Button>
-          <Button
-            variant="outlined"
-            color={isCopied ? "success" : "primary"}
-            onClick={handleClickCopy}
-          >
-            {isCopied ? "Copied!" : "Copy State"}
-          </Button>
-          <Typography>{songs.length} songs</Typography>
-        </Stack>
-      </Card>
-      <Card sx={{ px: 3, py: 2 }}>
-        <NewSongForm allSongs={songs} onSubmit={createSong} />
-      </Card>
+      <Stack
+        spacing={3}
+        direction="row"
+        sx={{ justifyContent: { xs: "stretch" } }}
+      >
+        <Card sx={{ px: 3, py: 2, position: "absolute", top: "0", left: "0" }}>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Button variant="outlined" onClick={printState}>
+              Print to Console
+            </Button>
+            <Button
+              variant="outlined"
+              color={isCopied ? "success" : "primary"}
+              onClick={handleClickCopy}
+            >
+              {isCopied ? "Copied!" : "Copy State"}
+            </Button>
+          </Stack>
+        </Card>
+        <Card sx={{ px: 3, py: 2 }}>
+          <NewSongForm allSongs={songs} onSubmit={createSong} />
+        </Card>
+      </Stack>
       <Card sx={{ px: 1, py: 1 }}>
+        <Typography textAlign="center" variant="subtitle2">
+          {songs.length} songs
+        </Typography>
         {songs.length ? (
           <List>
             {songs.map((song, i) => (
