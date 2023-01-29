@@ -24,30 +24,37 @@ import { useNavigate } from "react-router-dom";
 import { PlayCircleOutline } from "@mui/icons-material";
 import { useCopyToClipboard, useLocalStorage } from "usehooks-ts";
 import { LocalStorageKey } from "../lib/local-storage";
+import { AppState, useAppState } from "../use-app-state";
 
 const IconButton = styled(MuiIconButton)(({ theme }) => ({
   padding: theme.spacing(0.25),
 }));
 
 export function SongList() {
-  // Local Storage
-  const [storedState, setStoredState] = useLocalStorage<SongsDataState>(
-    LocalStorageKey.SongsDataState,
-    {
+  //
+  // App State
+
+  const [appStateStoredValue, setAppStateStoredValue] =
+    useLocalStorage<AppState>(LocalStorageKey.AppState, {
+      bubble: [],
+      topSongs: [],
       nextId: 1,
-      songs: [],
-    }
-  );
+    });
 
-  const top = useSongs(storedState);
-  const bubble = useSongs();
+  const appState = useAppState(appStateStoredValue);
+  const { topSongs: top, bubble, createSongInList, state } = appState;
 
-  // Update LocalStorage when state changes
   useEffect(() => {
-    setStoredState(top.state);
-  }, [top.state, setStoredState]);
+    setAppStateStoredValue(state);
+  }, [state, setAppStateStoredValue]);
+
+  //
+  // Router Nav
 
   const navigate = useNavigate();
+
+  //
+  // Copy to Clipboard
 
   const [copiedValue, copyValue] = useCopyToClipboard();
 
@@ -109,21 +116,30 @@ export function SongList() {
           ></iframe>
         </Card>
       </Box>
-      <Stack direction="row" alignItems="flex-start">
+      <Stack
+        direction="row"
+        alignItems="flex-start"
+        spacing={2}
+        marginY={2}
+        paddingX={2}
+      >
         <Stack
           direction="column"
           alignItems="stretch"
           spacing={2}
-          marginY={2}
           sx={{ width: "50%", maxWidth: "1200px" }}
         >
+          <Typography variant="h4">Main</Typography>
           <Stack
             spacing={3}
             direction="row"
             sx={{ justifyContent: { xs: "stretch" } }}
           >
             <Card sx={{ px: 3, py: 2 }}>
-              <NewSongForm allSongs={top.songs} onSubmit={top.createSong} />
+              <NewSongForm
+                allSongs={top.songs}
+                onSubmit={(newSong) => createSongInList(newSong, "topSongs")}
+              />
             </Card>
           </Stack>
           <Card sx={{ px: 1, py: 1 }}>
@@ -183,7 +199,9 @@ export function SongList() {
                   </ListItem>
                 ))}
               </List>
-            ) : null}
+            ) : (
+              <Typography>No List</Typography>
+            )}
           </Card>
         </Stack>
         <Stack
@@ -192,6 +210,7 @@ export function SongList() {
           marginY={2}
           sx={{ width: "50%", maxWidth: "1200px" }}
         >
+          <Typography variant="h4">Bubble</Typography>
           <Stack
             spacing={3}
             direction="row"
@@ -200,7 +219,7 @@ export function SongList() {
             <Card sx={{ px: 3, py: 2 }}>
               <NewSongForm
                 allSongs={bubble.songs}
-                onSubmit={bubble.createSong}
+                onSubmit={(newSong) => createSongInList(newSong, "bubble")}
               />
             </Card>
           </Stack>

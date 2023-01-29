@@ -11,6 +11,7 @@ type SongsReducerAction =
   | { type: "MOVE_SONG_TO_TOP"; payload: Song }
   | { type: "MOVE_SONG_TO_BOTTOM"; payload: Song }
   | { type: "CREATE_SONG"; payload: NewSong }
+  | { type: "ADD_SONG"; payload: Song }
   | { type: "UPDATE_SONG"; payload: Song }
   | { type: "REMOVE_SONG"; payload: Song }
   | { type: "RESET_STATE" };
@@ -31,6 +32,12 @@ export function useSongs(initState: SongsDataState = defaultState) {
     Reducer<SongsDataState, SongsReducerAction>
   >((prevState, action) => {
     switch (action.type) {
+      case "ADD_SONG": {
+        return {
+          ...prevState,
+          songs: [action.payload, ...prevState.songs],
+        };
+      }
       case "CREATE_SONG": {
         const newSong: Song = {
           id: prevState.nextId,
@@ -132,6 +139,13 @@ export function useSongs(initState: SongsDataState = defaultState) {
     });
   }, []);
 
+  const addSong = useCallback((song: Song) => {
+    dispatch({
+      type: "ADD_SONG",
+      payload: song,
+    });
+  }, []);
+
   const removeSong = useCallback((song: Song) => {
     dispatch({
       type: "REMOVE_SONG",
@@ -182,7 +196,8 @@ export function useSongs(initState: SongsDataState = defaultState) {
     setSongs,
     getSongById,
     updateSong,
-    createSong,
+    addSong,
+    // createSong,
     removeSong,
     promoteSong,
     demoteSong,

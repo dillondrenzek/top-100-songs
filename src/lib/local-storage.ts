@@ -3,4 +3,5 @@ export enum LocalStorageKey {
   SongId = "SongId",
   SongsDataState = "SongsDataState",
   BubbleDataState = "BubbleDataState",
+  AppState = "AppState",
 }
