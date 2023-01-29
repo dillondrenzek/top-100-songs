@@ -23,12 +23,18 @@ import { PlayCircleOutline } from "@mui/icons-material";
 import { useCopyToClipboard, useLocalStorage } from "usehooks-ts";
 import { LocalStorageKey } from "../lib/local-storage";
 import { AppState, useAppState } from "../use-app-state";
+import { ControlPanel } from "./control-panel";
 
 const IconButton = styled(MuiIconButton)(({ theme }) => ({
   padding: theme.spacing(0.25),
 }));
 
 export function SongList() {
+  //
+  // Router Nav
+
+  const navigate = useNavigate();
+
   //
   // App State
 
@@ -46,16 +52,6 @@ export function SongList() {
     setAppStateStoredValue(state);
   }, [state, setAppStateStoredValue]);
 
-  //
-  // Router Nav
-
-  const navigate = useNavigate();
-
-  //
-  // Copy to Clipboard
-
-  const [, copyValue] = useCopyToClipboard();
-
   // How far we've come - https://open.spotify.com/track/0gbLfFlEyVHiKzlZIb0gce?si=85ef49997bfc4070
   // Chariot - https://open.spotify.com/track/08kTO4EW0jb07zNsCNM83w?si=860c8155a8e4405c
 
@@ -63,40 +59,19 @@ export function SongList() {
     "2H30WL3exSctlDC9GyRbD4"
   );
 
-  const [isCopied, setIsCopied] = useState(false);
-
-  const handleClickCopy = useCallback(() => {
-    copyValue(JSON.stringify(top.state));
-    setIsCopied(true);
-
-    setTimeout(() => {
-      setIsCopied(false);
-    }, 10000);
-  }, [copyValue, top.state]);
-
-  const printState = useCallback(() => {
-    console.log(state);
-  }, [state]);
-
   return (
     <>
       <Box sx={{ position: "fixed", height: "100vh", width: "100vw" }}>
         <Card
-          sx={{ px: 1, py: 1, position: "absolute", bottom: "0", left: "0" }}
+          sx={{
+            px: 1,
+            py: 1,
+            position: "absolute",
+            bottom: "0",
+            right: "0",
+          }}
         >
-          <Stack direction="column" alignItems="stretch" spacing={1}>
-            <Button variant="outlined" size="small" onClick={printState}>
-              Print to Console
-            </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              color={isCopied ? "success" : "primary"}
-              onClick={handleClickCopy}
-            >
-              {isCopied ? "Copied!" : "Copy State"}
-            </Button>
-          </Stack>
+          <ControlPanel state={state} />
         </Card>
         <Card
           sx={{
