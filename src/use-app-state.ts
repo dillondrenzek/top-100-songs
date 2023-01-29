@@ -15,6 +15,11 @@ export function useAppState(initState: AppState): {
   topSongs: ReturnType<typeof useSongs>;
   bubble: ReturnType<typeof useSongs>;
   createSongInList: (newSong: NewSong, listName: AppStateListName) => void;
+  moveSongFromList: (
+    song: Song,
+    fromList: AppStateListName,
+    toList: AppStateListName
+  ) => void;
 } {
   const [nextId, setNextId] = useState(initState.nextId);
   const topSongs = useSongs({
@@ -55,10 +60,21 @@ export function useAppState(initState: AppState): {
     [nextId, topSongs, bubble]
   );
 
+  const moveSongFromList = useCallback(
+    (song: Song, fromList: AppStateListName, toList: AppStateListName) => {
+      const from = fromList === "bubble" ? bubble : topSongs;
+      const to = toList === "bubble" ? bubble : topSongs;
+      from.removeSong(song);
+      to.addSong(song);
+    },
+    [bubble, topSongs]
+  );
+
   return {
     state,
     topSongs,
     bubble,
     createSongInList,
+    moveSongFromList,
   };
 }

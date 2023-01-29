@@ -14,6 +14,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackwardIcon from "@mui/icons-material/ArrowBack";
 import CreateIcon from "@mui/icons-material/Create";
 import React, { useEffect, useState } from "react";
 import { NewSongForm } from "./song-list/new-song-form";
@@ -45,7 +47,13 @@ export function SongList() {
     });
 
   const appState = useAppState(appStateStoredValue);
-  const { topSongs: top, bubble, createSongInList, state } = appState;
+  const {
+    topSongs: top,
+    bubble,
+    createSongInList,
+    state,
+    moveSongFromList,
+  } = appState;
 
   useEffect(() => {
     setAppStateStoredValue(state);
@@ -154,6 +162,13 @@ export function SongList() {
                           <DeleteForeverIcon />
                         </IconButton>
                         <IconButton
+                          onClick={() =>
+                            moveSongFromList(song, "topSongs", "bubble")
+                          }
+                        >
+                          <ArrowForwardIcon />
+                        </IconButton>
+                        <IconButton
                           onClick={() => navigate(`/songs/${song.id}`)}
                         >
                           <CreateIcon />
@@ -235,6 +250,13 @@ export function SongList() {
                         </IconButton>
                         <IconButton onClick={() => bubble.removeSong(song)}>
                           <DeleteForeverIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() =>
+                            moveSongFromList(song, "bubble", "topSongs")
+                          }
+                        >
+                          <ArrowBackwardIcon />
                         </IconButton>
                         <IconButton
                           onClick={() => navigate(`/songs/${song.id}`)}
