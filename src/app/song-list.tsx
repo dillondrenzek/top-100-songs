@@ -54,7 +54,7 @@ export function SongList() {
   //
   // Copy to Clipboard
 
-  const [copiedValue, copyValue] = useCopyToClipboard();
+  const [, copyValue] = useCopyToClipboard();
 
   // How far we've come - https://open.spotify.com/track/0gbLfFlEyVHiKzlZIb0gce?si=85ef49997bfc4070
   // Chariot - https://open.spotify.com/track/08kTO4EW0jb07zNsCNM83w?si=860c8155a8e4405c

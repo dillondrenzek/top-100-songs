@@ -1,8 +1,6 @@
-import { Reducer, useCallback, useEffect, useReducer } from "react";
+import { Reducer, useCallback, useReducer } from "react";
 import { NewSong, Song } from "./song";
-import { useLocalStorage } from "usehooks-ts";
 import * as ArrayHelpers from "./lib/array";
-import { LocalStorageKey } from "./lib/local-storage";
 
 type SongsReducerAction =
   | { type: "SET_SONGS"; payload: Song[] }
