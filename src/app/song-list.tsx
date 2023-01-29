@@ -5,7 +5,6 @@ import {
   ListItemText,
   Stack,
   IconButton as MuiIconButton,
-  Button,
   Typography,
   Box,
   styled,
@@ -16,11 +15,11 @@ import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CreateIcon from "@mui/icons-material/Create";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NewSongForm } from "./song-list/new-song-form";
 import { useNavigate } from "react-router-dom";
 import { PlayCircleOutline } from "@mui/icons-material";
-import { useCopyToClipboard, useLocalStorage } from "usehooks-ts";
+import { useLocalStorage } from "usehooks-ts";
 import { LocalStorageKey } from "../lib/local-storage";
 import { AppState, useAppState } from "../use-app-state";
 import { ControlPanel } from "./control-panel";
