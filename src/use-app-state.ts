@@ -19,11 +19,9 @@ export function useAppState(initState: AppState): {
 } {
   const [nextId, setNextId] = useState(initState.nextId);
   const topSongs = useSongs({
-    nextId: initState.nextId,
     songs: initState.topSongs,
   });
   const bubble = useSongs({
-    nextId: initState.nextId,
     songs: initState.bubble,
   });
 
