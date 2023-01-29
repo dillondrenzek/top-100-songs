@@ -1,13 +1,6 @@
-import { Reducer, useCallback, useEffect, useReducer } from "react";
+import { Reducer, useCallback, useReducer } from "react";
 import { NewSong, Song } from "./song";
-import { useLocalStorage } from "usehooks-ts";
 import * as ArrayHelpers from "./lib/array";
-
-enum LocalStorageKey {
-  Songs = "Songs",
-  SongId = "SongId",
-  SongsDataState = "SongsDataState",
-}
 
 type SongsReducerAction =
   | { type: "SET_SONGS"; payload: Song[] }
@@ -16,49 +9,29 @@ type SongsReducerAction =
   | { type: "MOVE_SONG_TO_TOP"; payload: Song }
   | { type: "MOVE_SONG_TO_BOTTOM"; payload: Song }
   | { type: "CREATE_SONG"; payload: NewSong }
+  | { type: "ADD_SONG"; payload: Song }
   | { type: "UPDATE_SONG"; payload: Song }
   | { type: "REMOVE_SONG"; payload: Song }
   | { type: "RESET_STATE" };
 
-interface SongsDataState {
-  version: number;
-  nextId: number;
+export interface SongsDataState {
   songs: Song[];
 }
 
-export function useSongs() {
-  const version = 1;
+const defaultState: SongsDataState = {
+  songs: [],
+};
 
-  const defaultState: SongsDataState = {
-    version,
-    nextId: 1,
-    songs: [],
-  };
-
-  // Local Storage
-  const [storedState, setStoredState] = useLocalStorage<SongsDataState>(
-    LocalStorageKey.SongsDataState,
-    {
-      version,
-      nextId: 1,
-      songs: [],
-    }
-  );
-
+export function useSongs(initState: SongsDataState = defaultState) {
   // Reducer
   const [state, dispatch] = useReducer<
     Reducer<SongsDataState, SongsReducerAction>
   >((prevState, action) => {
     switch (action.type) {
-      case "CREATE_SONG": {
-        const newSong: Song = {
-          id: prevState.nextId,
-          ...action.payload,
-        };
+      case "ADD_SONG": {
         return {
           ...prevState,
-          nextId: prevState.nextId + 1,
-          songs: [newSong, ...prevState.songs],
+          songs: [action.payload, ...prevState.songs],
         };
       }
 
@@ -126,12 +99,7 @@ export function useSongs() {
       default:
         return prevState;
     }
-  }, storedState);
-
-  // Update LocalStorage when state changes
-  useEffect(() => {
-    setStoredState(state);
-  }, [setStoredState, state]);
+  }, initState);
 
   // Public API
 
@@ -149,10 +117,10 @@ export function useSongs() {
     });
   }, []);
 
-  const createSong = useCallback((newSong: NewSong) => {
+  const addSong = useCallback((song: Song) => {
     dispatch({
-      type: "CREATE_SONG",
-      payload: newSong,
+      type: "ADD_SONG",
+      payload: song,
     });
   }, []);
 
@@ -195,10 +163,6 @@ export function useSongs() {
     dispatch({ type: "SET_SONGS", payload: newSongs });
   }, []);
 
-  const printState = useCallback(() => {
-    console.log(state);
-  }, [state]);
-
   return {
     state,
     songs: state.songs,
@@ -206,12 +170,11 @@ export function useSongs() {
     setSongs,
     getSongById,
     updateSong,
-    createSong,
+    addSong,
     removeSong,
     promoteSong,
     demoteSong,
     moveSongToTop,
     moveSongToBottom,
-    printState,
   };
 }
