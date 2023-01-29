@@ -8,6 +8,7 @@ import {
   Typography,
   Box,
   styled,
+  TextField,
 } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -41,6 +42,7 @@ export function SongList() {
 
   const [appStateStoredValue, setAppStateStoredValue] =
     useLocalStorage<AppState>(LocalStorageKey.AppState, {
+      maxTopSongs: 10,
       bubble: [],
       topSongs: [],
       nextId: 1,
@@ -48,11 +50,12 @@ export function SongList() {
 
   const appState = useAppState(appStateStoredValue);
   const {
+    state,
     topSongs: top,
     bubble,
     createSongInList,
-    state,
     moveSongFromList,
+    setMaxTopSongs,
   } = appState;
 
   useEffect(() => {
@@ -127,13 +130,30 @@ export function SongList() {
             </Card>
           </Stack>
           <Card sx={{ px: 1, py: 1 }}>
-            <Typography textAlign="center" variant="subtitle2">
-              {top.songs.length} songs
-            </Typography>
+            <Stack
+              spacing={2}
+              direction="row"
+              sx={{ alignItems: "center", justifyContent: "center" }}
+            >
+              <Typography textAlign="center" variant="subtitle2">
+                {top.songs.length} songs
+              </Typography>
+              <TextField
+                size="small"
+                label="# of Max Top Songs"
+                value={state.maxTopSongs}
+                onChange={(ev) => setMaxTopSongs(parseInt(ev.target.value))}
+              />
+            </Stack>
             {top.songs.length ? (
               <List>
                 {top.songs.map((song, i) => (
-                  <ListItem key={i}>
+                  <ListItem
+                    key={i}
+                    sx={{
+                      backgroundColor: i <= state.maxTopSongs ? "#fff" : "#f70",
+                    }}
+                  >
                     <Stack direction="row" alignItems="center">
                       <ListItemText
                         sx={{

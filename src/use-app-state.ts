@@ -6,6 +6,7 @@ export interface AppState {
   topSongs: Song[];
   bubble: Song[];
   nextId: number;
+  maxTopSongs: number;
 }
 
 type AppStateListName = keyof Pick<AppState, "topSongs" | "bubble">;
@@ -20,7 +21,9 @@ export function useAppState(initState: AppState): {
     fromList: AppStateListName,
     toList: AppStateListName
   ) => void;
+  setMaxTopSongs: React.Dispatch<React.SetStateAction<number>>;
 } {
+  const [maxTopSongs, setMaxTopSongs] = useState<number>(initState.maxTopSongs);
   const [nextId, setNextId] = useState(initState.nextId);
   const topSongs = useSongs({
     songs: initState.topSongs,
@@ -31,11 +34,12 @@ export function useAppState(initState: AppState): {
 
   const state = useMemo<AppState>(() => {
     return {
+      maxTopSongs,
       nextId,
       topSongs: topSongs.state.songs,
       bubble: bubble.state.songs,
     };
-  }, [nextId, topSongs.state.songs, bubble.state.songs]);
+  }, [nextId, topSongs.state.songs, bubble.state.songs, maxTopSongs]);
 
   const createSongInList = useCallback(
     (newSong: NewSong, listName: AppStateListName) => {
@@ -74,6 +78,7 @@ export function useAppState(initState: AppState): {
     state,
     topSongs,
     bubble,
+    setMaxTopSongs,
     createSongInList,
     moveSongFromList,
   };
