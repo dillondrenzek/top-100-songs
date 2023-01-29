@@ -2,12 +2,7 @@ import { Reducer, useCallback, useEffect, useReducer } from "react";
 import { NewSong, Song } from "./song";
 import { useLocalStorage } from "usehooks-ts";
 import * as ArrayHelpers from "./lib/array";
-
-enum LocalStorageKey {
-  Songs = "Songs",
-  SongId = "SongId",
-  SongsDataState = "SongsDataState",
-}
+import { LocalStorageKey } from "./lib/local-storage";
 
 type SongsReducerAction =
   | { type: "SET_SONGS"; payload: Song[] }
@@ -20,31 +15,17 @@ type SongsReducerAction =
   | { type: "REMOVE_SONG"; payload: Song }
   | { type: "RESET_STATE" };
 
-interface SongsDataState {
-  version: number;
+export interface SongsDataState {
   nextId: number;
   songs: Song[];
 }
 
-export function useSongs() {
-  const version = 1;
+const defaultState: SongsDataState = {
+  nextId: 1,
+  songs: [],
+};
 
-  const defaultState: SongsDataState = {
-    version,
-    nextId: 1,
-    songs: [],
-  };
-
-  // Local Storage
-  const [storedState, setStoredState] = useLocalStorage<SongsDataState>(
-    LocalStorageKey.SongsDataState,
-    {
-      version,
-      nextId: 1,
-      songs: [],
-    }
-  );
-
+export function useSongs(initState: SongsDataState = defaultState) {
   // Reducer
   const [state, dispatch] = useReducer<
     Reducer<SongsDataState, SongsReducerAction>
@@ -126,12 +107,7 @@ export function useSongs() {
       default:
         return prevState;
     }
-  }, storedState);
-
-  // Update LocalStorage when state changes
-  useEffect(() => {
-    setStoredState(state);
-  }, [setStoredState, state]);
+  }, initState);
 
   // Public API
 
