@@ -15,10 +15,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ReorderRoundedIcon from "@mui/icons-material/ReorderRounded";
 import CreateIcon from "@mui/icons-material/Create";
 import React, { useCallback, useEffect, useState } from "react";
-import { SongsDataState, useSongs } from "../use-songs";
 import { NewSongForm } from "./song-list/new-song-form";
 import { useNavigate } from "react-router-dom";
 import { PlayCircleOutline } from "@mui/icons-material";
@@ -76,6 +74,10 @@ export function SongList() {
     }, 10000);
   }, [copyValue, top.state]);
 
+  const printState = useCallback(() => {
+    console.log(state);
+  }, [state]);
+
   return (
     <>
       <Box sx={{ position: "fixed", height: "100vh", width: "100vw" }}>
@@ -83,7 +85,7 @@ export function SongList() {
           sx={{ px: 1, py: 1, position: "absolute", bottom: "0", left: "0" }}
         >
           <Stack direction="column" alignItems="stretch" spacing={1}>
-            <Button variant="outlined" size="small" onClick={top.printState}>
+            <Button variant="outlined" size="small" onClick={printState}>
               Print to Console
             </Button>
             <Button

@@ -17,12 +17,10 @@ type SongsReducerAction =
   | { type: "RESET_STATE" };
 
 export interface SongsDataState {
-  nextId: number;
   songs: Song[];
 }
 
 const defaultState: SongsDataState = {
-  nextId: 1,
   songs: [],
 };
 
@@ -36,17 +34,6 @@ export function useSongs(initState: SongsDataState = defaultState) {
         return {
           ...prevState,
           songs: [action.payload, ...prevState.songs],
-        };
-      }
-      case "CREATE_SONG": {
-        const newSong: Song = {
-          id: prevState.nextId,
-          ...action.payload,
-        };
-        return {
-          ...prevState,
-          nextId: prevState.nextId + 1,
-          songs: [newSong, ...prevState.songs],
         };
       }
 
@@ -132,13 +119,6 @@ export function useSongs(initState: SongsDataState = defaultState) {
     });
   }, []);
 
-  const createSong = useCallback((newSong: NewSong) => {
-    dispatch({
-      type: "CREATE_SONG",
-      payload: newSong,
-    });
-  }, []);
-
   const addSong = useCallback((song: Song) => {
     dispatch({
       type: "ADD_SONG",
@@ -185,10 +165,6 @@ export function useSongs(initState: SongsDataState = defaultState) {
     dispatch({ type: "SET_SONGS", payload: newSongs });
   }, []);
 
-  const printState = useCallback(() => {
-    console.log(state);
-  }, [state]);
-
   return {
     state,
     songs: state.songs,
@@ -197,12 +173,10 @@ export function useSongs(initState: SongsDataState = defaultState) {
     getSongById,
     updateSong,
     addSong,
-    // createSong,
     removeSong,
     promoteSong,
     demoteSong,
     moveSongToTop,
     moveSongToBottom,
-    printState,
   };
 }
