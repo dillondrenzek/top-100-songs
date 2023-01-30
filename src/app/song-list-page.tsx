@@ -9,7 +9,6 @@ import {
   Box,
   styled,
   TextField,
-  Button,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -26,7 +25,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import React, { ReactNode, useEffect, useState } from "react";
 import { NewSongForm } from "./song-list/new-song-form";
 import { useNavigate } from "react-router-dom";
-import { Create, PlayCircleOutline } from "@mui/icons-material";
+import { PlayCircleOutline } from "@mui/icons-material";
 import { useLocalStorage } from "usehooks-ts";
 import { LocalStorageKey } from "../lib/local-storage";
 import { AppState, useAppState } from "../use-app-state";
@@ -77,7 +76,7 @@ const IconButton = styled(MuiIconButton)(({ theme }) => ({
   padding: theme.spacing(0.25),
 }));
 
-export function SongList() {
+export function SongListPage() {
   //
   // Router Nav
 
@@ -236,6 +235,7 @@ export function SongList() {
                         sx={{ flex: "1 0 auto" }}
                       >
                         <Stack direction="row" spacing={2} alignItems="center">
+                          {/* Play Button */}
                           <IconButton
                             disabled={!song.spotifyId}
                             onClick={() =>

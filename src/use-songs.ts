@@ -16,10 +16,12 @@ type SongsReducerAction =
 
 export interface SongsDataState {
   songs: Song[];
+  maxLength: number | null;
 }
 
 const defaultState: SongsDataState = {
   songs: [],
+  maxLength: null,
 };
 
 export function useSongs(initState: SongsDataState = defaultState) {

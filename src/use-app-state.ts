@@ -27,9 +27,11 @@ export function useAppState(initState: AppState): {
   const [nextId, setNextId] = useState(initState.nextId);
   const topSongs = useSongs({
     songs: initState.topSongs,
+    maxLength: maxTopSongs,
   });
   const bubble = useSongs({
     songs: initState.bubble,
+    maxLength: null,
   });
 
   const state = useMemo<AppState>(() => {

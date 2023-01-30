@@ -1,14 +1,14 @@
-import { Box, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { EditSongPage } from "./app/edit-song-page";
-import { SongList } from "./app/song-list";
+import { SongListPage } from "./app/song-list-page";
 import { AppThemeProvider } from "./theme";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <SongList />,
+    element: <SongListPage />,
   },
   {
     path: "/songs/:songId",
