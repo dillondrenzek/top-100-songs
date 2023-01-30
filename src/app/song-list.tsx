@@ -9,6 +9,10 @@ import {
   Box,
   styled,
   TextField,
+  Button,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -17,15 +21,57 @@ import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackwardIcon from "@mui/icons-material/ArrowBack";
+import MoreIcon from "@mui/icons-material/MoreVert";
 import CreateIcon from "@mui/icons-material/Create";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { NewSongForm } from "./song-list/new-song-form";
 import { useNavigate } from "react-router-dom";
-import { PlayCircleOutline } from "@mui/icons-material";
+import { Create, PlayCircleOutline } from "@mui/icons-material";
 import { useLocalStorage } from "usehooks-ts";
 import { LocalStorageKey } from "../lib/local-storage";
 import { AppState, useAppState } from "../use-app-state";
 import { ControlPanel } from "./control-panel";
+
+function ActionsMenu(props: {
+  /**
+   * Should be <MenuItem>
+   */
+  children?: ReactNode;
+}) {
+  const { children } = props;
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <>
+      <IconButton
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+      >
+        <MoreIcon fontSize="small" />
+      </IconButton>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        {children}
+      </Menu>
+    </>
+  );
+}
 
 const IconButton = styled(MuiIconButton)(({ theme }) => ({
   padding: theme.spacing(0.25),
@@ -117,15 +163,19 @@ export function SongList() {
           sx={{ width: "50%", maxWidth: "1200px" }}
         >
           <Typography variant="h4">Main</Typography>
-          <Stack
-            spacing={3}
-            direction="row"
-            sx={{ justifyContent: { xs: "stretch" } }}
-          >
+          <Stack spacing={3} direction="row" sx={{}}>
             <Card sx={{ px: 3, py: 2 }}>
               <NewSongForm
                 allSongs={top.songs}
                 onSubmit={(newSong) => createSongInList(newSong, "topSongs")}
+              />
+            </Card>
+            <Card sx={{ px: 3, py: 2 }}>
+              <TextField
+                size="small"
+                label="# of Max Top Songs"
+                value={state.maxTopSongs}
+                onChange={(ev) => setMaxTopSongs(parseInt(ev.target.value))}
               />
             </Card>
           </Stack>
@@ -136,14 +186,8 @@ export function SongList() {
               sx={{ alignItems: "center", justifyContent: "center" }}
             >
               <Typography textAlign="center" variant="subtitle2">
-                {top.songs.length} songs
+                {top.songs.length}/{state.maxTopSongs} songs
               </Typography>
-              <TextField
-                size="small"
-                label="# of Max Top Songs"
-                value={state.maxTopSongs}
-                onChange={(ev) => setMaxTopSongs(parseInt(ev.target.value))}
-              />
             </Stack>
             {top.songs.length ? (
               <List>
@@ -154,7 +198,11 @@ export function SongList() {
                       backgroundColor: i < state.maxTopSongs ? "#fff" : "#f70",
                     }}
                   >
-                    <Stack direction="row" alignItems="center">
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      sx={{ flex: "1 0 auto" }}
+                    >
                       <ListItemText
                         sx={{
                           pr: 1.5,
@@ -162,10 +210,11 @@ export function SongList() {
                           width: "15px",
                           textAlign: "center",
                           borderRight: "1px solid #aaa",
+                          flex: "0 1 auto",
                         }}
                         secondary={i + 1}
                       />
-                      <Stack direction="row" alignItems="center" sx={{ mr: 3 }}>
+                      <Stack direction="row" alignItems="center" sx={{ mx: 3 }}>
                         <IconButton onClick={() => top.moveSongToTop(song)}>
                           <VerticalAlignTopIcon />
                         </IconButton>
@@ -178,33 +227,55 @@ export function SongList() {
                         <IconButton onClick={() => top.moveSongToBottom(song)}>
                           <VerticalAlignBottomIcon />
                         </IconButton>
-                        <IconButton onClick={() => top.removeSong(song)}>
-                          <DeleteForeverIcon />
-                        </IconButton>
-                        <IconButton
-                          onClick={() =>
-                            moveSongFromList(song, "topSongs", "bubble")
-                          }
-                        >
-                          <ArrowForwardIcon />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => navigate(`/songs/${song.id}`)}
-                        >
-                          <CreateIcon />
-                        </IconButton>
-                        <IconButton
-                          disabled={!song.spotifyId}
-                          onClick={() =>
-                            setPlayerSpotifyId(song?.spotifyId ?? "")
-                          }
-                        >
-                          <PlayCircleOutline />
-                        </IconButton>
                       </Stack>
-                      <Stack direction="row" spacing={1} alignItems="baseline">
-                        <ListItemText primary={song.name} />
-                        <ListItemText secondary={song.artist} />
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        spacing={1}
+                        sx={{ flex: "1 0 auto" }}
+                      >
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <IconButton
+                            disabled={!song.spotifyId}
+                            onClick={() =>
+                              setPlayerSpotifyId(song?.spotifyId ?? "")
+                            }
+                          >
+                            <PlayCircleOutline />
+                          </IconButton>
+                          <ListItemText primary={song.name} />
+                          <ListItemText secondary={song.artist} />
+                        </Stack>
+                        <ActionsMenu>
+                          {/* Edit */}
+                          <MenuItem
+                            onClick={() => navigate(`/songs/${song.id}`)}
+                          >
+                            <ListItemIcon>
+                              <CreateIcon />
+                            </ListItemIcon>
+                            <ListItemText>Edit</ListItemText>
+                          </MenuItem>
+                          {/* Move To Bubble */}
+                          <MenuItem
+                            onClick={() =>
+                              moveSongFromList(song, "topSongs", "bubble")
+                            }
+                          >
+                            <ListItemIcon>
+                              <ArrowForwardIcon />
+                            </ListItemIcon>
+                            <ListItemText>Move to Bubble</ListItemText>
+                          </MenuItem>
+                          {/* Delete */}
+                          <MenuItem onClick={() => top.removeSong(song)}>
+                            <ListItemIcon>
+                              <DeleteForeverIcon />
+                            </ListItemIcon>
+                            <ListItemText>Delete</ListItemText>
+                          </MenuItem>
+                        </ActionsMenu>
                       </Stack>
                     </Stack>
                   </ListItem>
