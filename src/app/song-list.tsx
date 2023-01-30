@@ -151,7 +151,7 @@ export function SongList() {
                   <ListItem
                     key={i}
                     sx={{
-                      backgroundColor: i <= state.maxTopSongs ? "#fff" : "#f70",
+                      backgroundColor: i < state.maxTopSongs ? "#fff" : "#f70",
                     }}
                   >
                     <Stack direction="row" alignItems="center">
