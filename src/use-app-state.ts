@@ -1,4 +1,6 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
+import { LocalStorageKey } from "./lib/local-storage";
 import { NewSong, Song } from "./song";
 import { useSongs } from "./use-songs";
 
@@ -9,26 +11,30 @@ export interface AppState {
   maxTopSongs: number;
 }
 
+const defaultAppState: AppState = {
+  maxTopSongs: 10,
+  bubble: [],
+  topSongs: [],
+  nextId: 1,
+};
+
 type AppStateListName = keyof Pick<AppState, "topSongs" | "bubble">;
 
-export function useAppState(initState: AppState): {
-  state: AppState;
-  topSongs: ReturnType<typeof useSongs>;
-  bubble: ReturnType<typeof useSongs>;
-  createSongInList: (newSong: NewSong, listName: AppStateListName) => void;
-  moveSongFromList: (
-    song: Song,
-    fromList: AppStateListName,
-    toList: AppStateListName
-  ) => void;
-  setMaxTopSongs: React.Dispatch<React.SetStateAction<number>>;
-} {
+export function useAppState() {
+  const [initState, setAppStateStoredValue] = useLocalStorage<AppState>(
+    LocalStorageKey.AppState,
+    defaultAppState
+  );
+
   const [maxTopSongs, setMaxTopSongs] = useState<number>(initState.maxTopSongs);
+
   const [nextId, setNextId] = useState(initState.nextId);
+
   const topSongs = useSongs({
     songs: initState.topSongs,
     maxLength: maxTopSongs,
   });
+
   const bubble = useSongs({
     songs: initState.bubble,
     maxLength: null,
@@ -42,6 +48,11 @@ export function useAppState(initState: AppState): {
       bubble: bubble.state.songs,
     };
   }, [nextId, topSongs.state.songs, bubble.state.songs, maxTopSongs]);
+
+  // Local Storage
+  useEffect(() => {
+    setAppStateStoredValue(state);
+  }, [state, setAppStateStoredValue]);
 
   const createSongInList = useCallback(
     (newSong: NewSong, listName: AppStateListName) => {

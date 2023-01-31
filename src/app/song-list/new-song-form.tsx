@@ -70,11 +70,11 @@ export function NewSongForm(props: NewSongFormProps) {
     onSubmit,
   });
 
-  const { handleSubmit, handleChange, handleBlur, values } = formik;
+  const { handleSubmit, handleChange, values } = formik;
 
   return (
     <Stack
-      sx={{ width: "600px" }}
+      sx={{ width: "100%" }}
       direction="row"
       spacing={2}
       component="form"
@@ -84,7 +84,9 @@ export function NewSongForm(props: NewSongFormProps) {
         <SongAutocomplete
           sx={{ flex: "1 1 auto" }}
           options={allSongs}
-          renderInput={(params) => <TextField name="userInput" {...params} />}
+          renderInput={(params) => (
+            <TextField name="userInput" placeholder="Add to List" {...params} />
+          )}
           onChange={(ev, val, reason) => {
             if (DEBUG) {
               console.log("[EV]", "Change -", reason, "-", val);
