@@ -178,15 +178,11 @@ export function SongListPage() {
   //
   // Settings Modal
 
-  const [isSettingsModalOpen, toggleSettingsModal] = useToggle(false);
-
   const handleSettingsModalSubmit = useCallback(
     (values: ListSettings) => {
       setMaxTopSongs(values.maxTopSongs);
-
-      toggleSettingsModal();
     },
-    [toggleSettingsModal, setMaxTopSongs]
+    [setMaxTopSongs]
   );
 
   return (
