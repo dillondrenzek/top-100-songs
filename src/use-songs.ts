@@ -31,6 +31,13 @@ export function useSongs(initState: SongsDataState = defaultState) {
   >((prevState, action) => {
     switch (action.type) {
       case "ADD_SONG": {
+        if (
+          prevState.maxLength &&
+          prevState.songs.length >= prevState.maxLength
+        ) {
+          // throw new Error("MAX_LENGTH");
+          return prevState;
+        }
         return {
           ...prevState,
           songs: [action.payload, ...prevState.songs],
