@@ -1,31 +1,19 @@
 import {
-  Card,
-  List,
-  ListItem,
-  ListItemText,
   Stack,
-  IconButton as MuiIconButton,
-  Typography,
   Box,
-  styled,
   TextField,
-  Menu,
-  MenuItem,
-  ListItemIcon,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
-  DialogProps,
-} from "@mui/material";
-import React, { ReactNode, useEffect, useState } from "react";
-import { AppState } from "../../use-app-state";
-import { useFormik } from "formik";
+} from '@mui/material';
+import React from 'react';
+import { AppState } from '../../use-app-state';
+import { useFormik } from 'formik';
 
 export interface ListSettings {
-  maxTopSongs: AppState["maxTopSongs"];
+  maxTopSongs: AppState['maxTopSongs'];
 }
 
 type ListSettingsForm = ListSettings;
@@ -46,15 +34,15 @@ export function SettingsModal(props: {
   });
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
-      <DialogTitle variant="h2">Settings</DialogTitle>
-      <Box component="form" onSubmit={handleSubmit}>
+    <Dialog fullWidth maxWidth='sm' open={open} onClose={onClose}>
+      <DialogTitle variant='h2'>Settings</DialogTitle>
+      <Box component='form' onSubmit={handleSubmit}>
         <DialogContent>
-          <Stack direction="column" spacing={1} sx={{ my: 1 }}>
+          <Stack direction='column' spacing={1} sx={{ my: 1 }}>
             <TextField
-              name="maxTopSongs"
-              size="small"
-              label="# of Max Top Songs"
+              name='maxTopSongs'
+              size='small'
+              label='# of Max Top Songs'
               value={values.maxTopSongs}
               onChange={handleChange}
             />
@@ -62,20 +50,20 @@ export function SettingsModal(props: {
         </DialogContent>
         <DialogActions>
           <Button
-            color="secondary"
-            variant="text"
-            size="large"
+            color='secondary'
+            variant='text'
+            size='large'
             onClick={() => onClose()}
-            sx={{ minWidth: "140px" }}
+            sx={{ minWidth: '140px' }}
           >
             Cancel
           </Button>
           <Button
-            type="submit"
-            color="primary"
-            variant="contained"
-            size="large"
-            sx={{ minWidth: "140px" }}
+            type='submit'
+            color='primary'
+            variant='contained'
+            size='large'
+            sx={{ minWidth: '140px' }}
           >
             Save
           </Button>
