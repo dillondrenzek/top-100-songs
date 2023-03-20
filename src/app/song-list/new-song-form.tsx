@@ -1,8 +1,8 @@
-import { Stack, Button, TextField } from "@mui/material";
-import { FormikHelpers, useFormik } from "formik";
-import React, { useCallback } from "react";
-import { isSong, NewSong, Song } from "../../song";
-import { SongAutocomplete } from "./new-song-form/song-autocomplete";
+import { Stack, Button, TextField } from '@mui/material';
+import { FormikHelpers, useFormik } from 'formik';
+import React, { useCallback } from 'react';
+import { isSong, NewSong, Song } from '../../song';
+import { SongAutocomplete } from './new-song-form/song-autocomplete';
 
 const DEBUG = true;
 
@@ -13,12 +13,12 @@ function songAsUserInput(song: Song): string {
 function newSongFromUserInput(input: string): NewSong {
   if (!input) {
     return {
-      artist: "",
-      name: "",
+      artist: '',
+      name: '',
     };
   }
 
-  const splitSong = input.split("-");
+  const splitSong = input.split('-');
   if (splitSong.length === 2) {
     return {
       artist: splitSong[1],
@@ -27,7 +27,7 @@ function newSongFromUserInput(input: string): NewSong {
   }
 
   return {
-    artist: "",
+    artist: '',
     name: splitSong[0],
   };
 }
@@ -63,50 +63,50 @@ export function NewSongForm(props: NewSongFormProps) {
 
   const formik = useFormik<NewSongFormModel>({
     initialValues: {
-      name: "",
-      artist: "",
-      userInput: "",
+      name: '',
+      artist: '',
+      userInput: '',
     },
     onSubmit,
   });
 
-  const { handleSubmit, handleChange, values } = formik;
+  const { handleSubmit, handleChange } = formik;
 
   return (
     <Stack
-      sx={{ width: "100%" }}
-      direction="row"
+      sx={{ width: '100%' }}
+      direction='row'
       spacing={2}
-      component="form"
+      component='form'
       onSubmit={handleSubmit}
     >
-      <Stack direction="row" spacing={2} sx={{ flex: "1 1 auto" }}>
+      <Stack direction='row' spacing={2} sx={{ flex: '1 1 auto' }}>
         <SongAutocomplete
-          sx={{ flex: "1 1 auto" }}
+          sx={{ flex: '1 1 auto' }}
           options={allSongs}
           renderInput={(params) => (
-            <TextField name="userInput" placeholder="Add to List" {...params} />
+            <TextField name='userInput' placeholder='Add to List' {...params} />
           )}
           onChange={(ev, val, reason) => {
             if (DEBUG) {
-              console.log("[EV]", "Change -", reason, "-", val);
+              console.log('[EV]', 'Change -', reason, '-', val);
             }
-            if (reason === "selectOption" && isSong(val)) {
+            if (reason === 'selectOption' && isSong(val)) {
               onSelectSong?.(val);
             }
           }}
           onInputChange={(ev, val, reason) => {
             if (DEBUG) {
-              console.log("[EV]", "Input Change -", reason, "-", val);
+              console.log('[EV]', 'Input Change -', reason, '-', val);
             }
             handleChange(ev);
           }}
           getOptionLabel={(option) =>
-            typeof option === "string" ? option : songAsUserInput(option)
+            typeof option === 'string' ? option : songAsUserInput(option)
           }
         />
       </Stack>
-      <Button type="submit" variant="outlined">
+      <Button type='submit' variant='outlined'>
         Add
       </Button>
     </Stack>

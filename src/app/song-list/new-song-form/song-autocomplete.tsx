@@ -1,6 +1,6 @@
-import { TextField, Autocomplete, AutocompleteProps } from "@mui/material";
-import React, { useCallback, useMemo } from "react";
-import { Song } from "../../../song";
+import { Autocomplete, AutocompleteProps } from '@mui/material';
+import React from 'react';
+import { Song } from '../../../song';
 
 export type SongFreeSoloAutocompleteProps = AutocompleteProps<
   string | Song,
