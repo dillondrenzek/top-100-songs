@@ -193,6 +193,7 @@ export function SongListPage() {
             position: 'absolute',
             bottom: '0',
             right: '0',
+            pointerEvents: 'all',
           }}
         >
           <ControlPanel state={state} onSubmit={handleSettingsModalSubmit} />
@@ -204,6 +205,7 @@ export function SongListPage() {
             bottom: 0,
             right: '200px',
             borderRadius: 3,
+            pointerEvents: 'all',
           }}
         >
           <iframe
